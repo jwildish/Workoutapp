@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [react(), viteSingleFile()],
   base: './',
   build: {
-    outDir: 'docs'
+    outDir: 'docs',
+    target: 'es2015'
   }
 })
