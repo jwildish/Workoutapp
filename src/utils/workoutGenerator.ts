@@ -229,7 +229,13 @@ const calculateWorkoutDuration = (
   return Math.ceil((strengthTime + hypertrophyTime + hiitTime) / 60);
 };
 
-export const generateWorkout = (week: number, day: number, settings: WorkoutSettings): Workout => {
+const generateWorkout = (
+  week: number,
+  day: number,
+  settings: WorkoutSettings,
+  usedStrengthIds: Set<string>,
+  usedHypertrophyIds: Set<string>
+): Workout => {
   const isDeload = week === 4; // Week 4 is deload week
   const splitType = getSplitForDay(day);
   const split = workoutSplits[splitType];
@@ -238,22 +244,26 @@ export const generateWorkout = (week: number, day: number, settings: WorkoutSett
     (v, i, a) => a.indexOf(v) === i
   ) as MuscleGroup[];
 
-  // Get exercises for this split
+  // Get exercises for this split, excluding already used ones this week
   const availableStrength = shuffleArray(
     getExercisesByMuscleGroup(strengthExercises, split.strength)
+      .filter(ex => !usedStrengthIds.has(ex.id))
   );
   const availableHypertrophy = shuffleArray(
     getExercisesByMuscleGroup(hypertrophyExercises, split.hypertrophy)
+      .filter(ex => !usedHypertrophyIds.has(ex.id))
   );
 
-  // Select 2 strength exercises
-  const selectedStrength = availableStrength
-    .slice(0, 2)
+  // Select 2 strength exercises (no repeats within week)
+  const selectedStrengthExercises = availableStrength.slice(0, 2);
+  selectedStrengthExercises.forEach(ex => usedStrengthIds.add(ex.id));
+  const selectedStrength = selectedStrengthExercises
     .map(ex => createStrengthExercise(ex, week, isDeload));
 
-  // Select 3 hypertrophy exercises
-  const selectedHypertrophy = availableHypertrophy
-    .slice(0, 3)
+  // Select 3 hypertrophy exercises (no repeats within week)
+  const selectedHypertrophyExercises = availableHypertrophy.slice(0, 3);
+  selectedHypertrophyExercises.forEach(ex => usedHypertrophyIds.add(ex.id));
+  const selectedHypertrophy = selectedHypertrophyExercises
     .map(ex => createHypertrophyExercise(ex, week, isDeload));
 
   // Create HIIT section with 4 exercises (2+ ab exercises)
@@ -281,8 +291,12 @@ export const generateWeekPlan = (week: number, settings: WorkoutSettings): WeekP
   const workoutsPerWeek = 4; // 4-day split
   const workouts: Workout[] = [];
 
+  // Track used exercises across the week to prevent repeats
+  const usedStrengthIds = new Set<string>();
+  const usedHypertrophyIds = new Set<string>();
+
   for (let day = 1; day <= workoutsPerWeek; day++) {
-    workouts.push(generateWorkout(week, day, settings));
+    workouts.push(generateWorkout(week, day, settings, usedStrengthIds, usedHypertrophyIds));
   }
 
   return {

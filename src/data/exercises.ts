@@ -91,32 +91,32 @@ export const hiitExercises: Exercise[] = [
   { id: 'hiit13', name: 'Plank Jacks', muscleGroup: 'core', type: 'hiit', description: 'Core stability with cardio' },
 ];
 
-// 4-Day Push/Pull Split with legs distributed
-// Each muscle trained 2x/week for optimal hypertrophy (Schoenfeld et al., 2016)
+// 4-Day Push/Pull Split with reduced leg volume (legs on pull days only)
+// Upper body 2x/week, lower body 1x/week per muscle group
 export const workoutSplits = {
   pushA: {
-    name: 'Push A + Quads',
-    strength: ['chest', 'shoulders', 'quads'] as const,
-    hypertrophy: ['chest', 'triceps', 'shoulders', 'quads'] as const,
-    description: 'Pushing movements with quad-dominant legs'
+    name: 'Push A',
+    strength: ['chest', 'shoulders'] as const,
+    hypertrophy: ['chest', 'triceps', 'shoulders'] as const,
+    description: 'Chest and shoulder pressing movements'
   },
   pullA: {
-    name: 'Pull A + Hamstrings',
-    strength: ['back', 'hamstrings'] as const,
-    hypertrophy: ['back', 'biceps', 'hamstrings', 'glutes'] as const,
-    description: 'Pulling movements with hip hinge legs'
+    name: 'Pull A + Legs',
+    strength: ['back', 'quads'] as const,
+    hypertrophy: ['back', 'biceps', 'quads', 'hamstrings'] as const,
+    description: 'Pulling movements with quad and hamstring work'
   },
   pushB: {
-    name: 'Push B + Glutes',
-    strength: ['chest', 'shoulders', 'glutes'] as const,
-    hypertrophy: ['chest', 'triceps', 'shoulders', 'glutes', 'calves'] as const,
-    description: 'Pushing movements with glute focus'
+    name: 'Push B',
+    strength: ['chest', 'shoulders'] as const,
+    hypertrophy: ['chest', 'triceps', 'shoulders'] as const,
+    description: 'Chest and shoulder pressing movements'
   },
   pullB: {
-    name: 'Pull B + Quads',
-    strength: ['back', 'quads'] as const,
-    hypertrophy: ['back', 'biceps', 'quads', 'calves'] as const,
-    description: 'Pulling movements with quad work'
+    name: 'Pull B + Legs',
+    strength: ['back', 'hamstrings'] as const,
+    hypertrophy: ['back', 'biceps', 'glutes', 'calves'] as const,
+    description: 'Pulling movements with glute and calf work'
   }
 };
 
