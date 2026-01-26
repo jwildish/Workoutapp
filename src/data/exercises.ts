@@ -74,50 +74,49 @@ export const hiitExercises: Exercise[] = [
   // Full body cardio
   { id: 'hiit1', name: 'Burpees', muscleGroup: 'full-body', type: 'hiit', description: 'Full body conditioning' },
   { id: 'hiit2', name: 'Kettlebell Swings', muscleGroup: 'full-body', type: 'hiit', description: 'Hip hinge cardio' },
-  { id: 'hiit3', name: 'Battle Ropes', muscleGroup: 'full-body', type: 'hiit', description: 'Upper body conditioning' },
 
   // Lower body
-  { id: 'hiit4', name: 'Jump Squats', muscleGroup: 'quads', type: 'hiit', description: 'Lower body power' },
-  { id: 'hiit5', name: 'Box Jumps', muscleGroup: 'quads', type: 'hiit', description: 'Plyometric power' },
-  { id: 'hiit6', name: 'Jumping Lunges', muscleGroup: 'quads', type: 'hiit', description: 'Unilateral leg power' },
+  { id: 'hiit3', name: 'Jump Squats', muscleGroup: 'quads', type: 'hiit', description: 'Lower body power' },
+  { id: 'hiit4', name: 'Box Jumps', muscleGroup: 'quads', type: 'hiit', description: 'Plyometric power' },
+  { id: 'hiit5', name: 'Jumping Lunges', muscleGroup: 'quads', type: 'hiit', description: 'Unilateral leg power' },
 
   // Core/Ab exercises (at least 2 per HIIT session)
-  { id: 'hiit7', name: 'Mountain Climbers', muscleGroup: 'core', type: 'hiit', description: 'Core and cardio' },
-  { id: 'hiit8', name: 'Bicycle Crunches', muscleGroup: 'core', type: 'hiit', description: 'Obliques and rectus abdominis' },
-  { id: 'hiit9', name: 'Plank to Push-up', muscleGroup: 'core', type: 'hiit', description: 'Core stability with movement' },
-  { id: 'hiit10', name: 'V-Ups', muscleGroup: 'core', type: 'hiit', description: 'Full ab contraction' },
-  { id: 'hiit11', name: 'Russian Twists', muscleGroup: 'core', type: 'hiit', description: 'Rotational core work' },
-  { id: 'hiit12', name: 'Dead Bug', muscleGroup: 'core', type: 'hiit', description: 'Anti-extension core stability' },
-  { id: 'hiit13', name: 'Flutter Kicks', muscleGroup: 'core', type: 'hiit', description: 'Lower ab endurance' },
-  { id: 'hiit14', name: 'Plank Jacks', muscleGroup: 'core', type: 'hiit', description: 'Core stability with cardio' },
+  { id: 'hiit6', name: 'Mountain Climbers', muscleGroup: 'core', type: 'hiit', description: 'Core and cardio' },
+  { id: 'hiit7', name: 'Bicycle Crunches', muscleGroup: 'core', type: 'hiit', description: 'Obliques and rectus abdominis' },
+  { id: 'hiit8', name: 'Plank to Push-up', muscleGroup: 'core', type: 'hiit', description: 'Core stability with movement' },
+  { id: 'hiit9', name: 'V-Ups', muscleGroup: 'core', type: 'hiit', description: 'Full ab contraction' },
+  { id: 'hiit10', name: 'Russian Twists', muscleGroup: 'core', type: 'hiit', description: 'Rotational core work' },
+  { id: 'hiit11', name: 'Dead Bug', muscleGroup: 'core', type: 'hiit', description: 'Anti-extension core stability' },
+  { id: 'hiit12', name: 'Flutter Kicks', muscleGroup: 'core', type: 'hiit', description: 'Lower ab endurance' },
+  { id: 'hiit13', name: 'Plank Jacks', muscleGroup: 'core', type: 'hiit', description: 'Core stability with cardio' },
 ];
 
-// 4-Day Upper/Lower Split based on research (Schoenfeld et al., 2015)
-// Each muscle trained 2x/week for optimal hypertrophy
+// 4-Day Push/Pull Split with legs distributed
+// Each muscle trained 2x/week for optimal hypertrophy (Schoenfeld et al., 2016)
 export const workoutSplits = {
-  upperA: {
-    name: 'Upper A (Push Focus)',
-    strength: ['chest', 'shoulders'] as const,
-    hypertrophy: ['chest', 'triceps', 'shoulders', 'back'] as const,
-    description: 'Horizontal push emphasis with back work'
+  pushA: {
+    name: 'Push A + Quads',
+    strength: ['chest', 'shoulders', 'quads'] as const,
+    hypertrophy: ['chest', 'triceps', 'shoulders', 'quads'] as const,
+    description: 'Pushing movements with quad-dominant legs'
   },
-  lowerA: {
-    name: 'Lower A (Quad Focus)',
-    strength: ['quads'] as const,
-    hypertrophy: ['quads', 'hamstrings', 'glutes', 'calves'] as const,
-    description: 'Squat pattern emphasis'
+  pullA: {
+    name: 'Pull A + Hamstrings',
+    strength: ['back', 'hamstrings'] as const,
+    hypertrophy: ['back', 'biceps', 'hamstrings', 'glutes'] as const,
+    description: 'Pulling movements with hip hinge legs'
   },
-  upperB: {
-    name: 'Upper B (Pull Focus)',
-    strength: ['back'] as const,
-    hypertrophy: ['back', 'biceps', 'shoulders', 'chest'] as const,
-    description: 'Vertical and horizontal pull emphasis'
+  pushB: {
+    name: 'Push B + Glutes',
+    strength: ['chest', 'shoulders', 'glutes'] as const,
+    hypertrophy: ['chest', 'triceps', 'shoulders', 'glutes', 'calves'] as const,
+    description: 'Pushing movements with glute focus'
   },
-  lowerB: {
-    name: 'Lower B (Hinge Focus)',
-    strength: ['hamstrings', 'glutes'] as const,
-    hypertrophy: ['hamstrings', 'glutes', 'quads', 'calves'] as const,
-    description: 'Hip hinge pattern emphasis'
+  pullB: {
+    name: 'Pull B + Quads',
+    strength: ['back', 'quads'] as const,
+    hypertrophy: ['back', 'biceps', 'quads', 'calves'] as const,
+    description: 'Pulling movements with quad work'
   }
 };
 

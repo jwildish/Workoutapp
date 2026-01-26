@@ -217,10 +217,10 @@ const createHIITSection = (week: number, isDeload: boolean): HIITSection => {
   };
 };
 
-type SplitType = 'upperA' | 'lowerA' | 'upperB' | 'lowerB';
+type SplitType = 'pushA' | 'pullA' | 'pushB' | 'pullB';
 
 const getSplitForDay = (day: number): SplitType => {
-  const splits: SplitType[] = ['upperA', 'lowerA', 'upperB', 'lowerB'];
+  const splits: SplitType[] = ['pushA', 'pullA', 'pushB', 'pullB'];
   return splits[(day - 1) % 4];
 };
 
