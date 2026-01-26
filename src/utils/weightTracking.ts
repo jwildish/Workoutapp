@@ -100,7 +100,7 @@ export const getSuggestedWeightForWeek = (
     suggestedWeight = latestEntry.weight * deloadMultiplier;
   }
 
-  return Math.round(suggestedWeight * 2) / 2; // Round to nearest 0.5kg
+  return Math.round(suggestedWeight * 2) / 2; // Round to nearest 0.5lbs
 };
 
 export const clearWeights = (): void => {

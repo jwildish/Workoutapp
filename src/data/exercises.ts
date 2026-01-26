@@ -123,15 +123,15 @@ export const workoutSplits = {
 // Progressive overload recommendations based on Prilepin's Chart and modern research
 export const progressionRules = {
   compound: {
-    weeklyIncrease: 2.5, // kg for upper body compounds
+    weeklyIncrease: 5, // lbs for upper body compounds
     deloadReduction: 0.6, // 60% of working weight
   },
   isolation: {
-    weeklyIncrease: 1.25, // kg for isolation movements
+    weeklyIncrease: 2.5, // lbs for isolation movements
     deloadReduction: 0.5, // 50% of working weight
   },
   lowerCompound: {
-    weeklyIncrease: 5, // kg for squats/deadlifts
+    weeklyIncrease: 10, // lbs for squats/deadlifts
     deloadReduction: 0.6,
   }
 };

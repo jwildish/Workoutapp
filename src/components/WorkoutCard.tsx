@@ -77,13 +77,13 @@ export const WorkoutCard: React.FC<Props> = ({ workout, onStartWorkout }) => {
                     <input
                       type="number"
                       step="0.5"
-                      placeholder={suggested || 'kg'}
+                      placeholder={suggested || 'lbs'}
                       value={weights[ex.id] || ''}
                       onChange={(e) => handleWeightChange(ex.id, e.target.value)}
                       onBlur={() => handleWeightSave(ex.id)}
                       className="weight-input"
                     />
-                    <span className="weight-unit">kg</span>
+                    <span className="weight-unit">lbs</span>
                   </div>
                 </li>
               );
@@ -108,13 +108,13 @@ export const WorkoutCard: React.FC<Props> = ({ workout, onStartWorkout }) => {
                     <input
                       type="number"
                       step="0.5"
-                      placeholder={suggested || 'kg'}
+                      placeholder={suggested || 'lbs'}
                       value={weights[ex.id] || ''}
                       onChange={(e) => handleWeightChange(ex.id, e.target.value)}
                       onBlur={() => handleWeightSave(ex.id)}
                       className="weight-input"
                     />
-                    <span className="weight-unit">kg</span>
+                    <span className="weight-unit">lbs</span>
                   </div>
                 </li>
               );

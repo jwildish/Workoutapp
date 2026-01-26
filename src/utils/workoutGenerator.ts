@@ -131,7 +131,7 @@ const getSuggestedWeight = (
     suggestedWeight *= deloadReduction;
   }
 
-  return Math.round(suggestedWeight * 2) / 2; // Round to nearest 0.5kg
+  return Math.round(suggestedWeight * 2) / 2; // Round to nearest 0.5lbs
 };
 
 const createStrengthExercise = (exercise: Exercise, week: number, isDeload: boolean): WorkoutExercise => {
@@ -176,26 +176,9 @@ const createHIITSection = (week: number, isDeload: boolean): HIITSection => {
 
   const allSelected = shuffleArray([...selectedCore, ...selectedOther]);
 
-  // Adjust timing based on week and deload
-  let workSeconds: number;
-  let restSeconds: number;
-
-  if (isDeload) {
-    workSeconds = 20;
-    restSeconds = 40;
-  } else if (week <= 2) {
-    workSeconds = 20;
-    restSeconds = 40;
-  } else if (week <= 4) {
-    workSeconds = 25;
-    restSeconds = 35;
-  } else if (week <= 6) {
-    workSeconds = 30;
-    restSeconds = 30;
-  } else {
-    workSeconds = 30;
-    restSeconds = 25;
-  }
+  // Tabata-style intervals: 20 seconds work, 10 seconds rest
+  const workSeconds = 20;
+  const restSeconds = 10;
 
   // Calculate rounds to fill ~8 minutes
   // Each exercise cycles through, then repeat

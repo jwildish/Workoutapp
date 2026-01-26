@@ -19,7 +19,7 @@ export const exportToText = (
   lines.push(`Level: ${settings.fitnessLevel}`);
   lines.push('');
   lines.push('PROGRAM STRUCTURE:');
-  lines.push('• 4 workouts per week (Upper/Lower split)');
+  lines.push('• 4 workouts per week (Push/Pull split)');
   lines.push('• Week 4 is DELOAD week');
   lines.push('• Progressive overload each week');
   lines.push('');
@@ -55,9 +55,9 @@ export const exportToText = (
 
         let weightStr = ex.weight;
         if (weightEntry) {
-          weightStr = `${weightEntry.weight}kg`;
+          weightStr = `${weightEntry.weight}lbs`;
         } else if (suggestedWeight) {
-          weightStr = `~${suggestedWeight}kg (suggested)`;
+          weightStr = `~${suggestedWeight}lbs (suggested)`;
         }
 
         lines.push(`  • ${ex.name}`);
@@ -82,9 +82,9 @@ export const exportToText = (
 
         let weightStr = ex.weight;
         if (weightEntry) {
-          weightStr = `${weightEntry.weight}kg`;
+          weightStr = `${weightEntry.weight}lbs`;
         } else if (suggestedWeight) {
-          weightStr = `~${suggestedWeight}kg (suggested)`;
+          weightStr = `~${suggestedWeight}lbs (suggested)`;
         }
 
         lines.push(`  • ${ex.name}`);
@@ -111,9 +111,9 @@ export const exportToText = (
   lines.push('PROGRESSION GUIDELINES:');
   lines.push('═══════════════════════════════════════════');
   lines.push('');
-  lines.push('Compound Upper Body: +2.5kg per week');
-  lines.push('Compound Lower Body: +5kg per week');
-  lines.push('Isolation Exercises: +1.25kg per week');
+  lines.push('Compound Upper Body: +5lbs per week');
+  lines.push('Compound Lower Body: +10lbs per week');
+  lines.push('Isolation Exercises: +2.5lbs per week');
   lines.push('');
   lines.push('DELOAD WEEK (Week 4):');
   lines.push('• Reduce weight by 40%');
@@ -166,8 +166,8 @@ export const exportToPDFHtml = (
       padding: 20px;
     }
     h1 { font-size: 18px; text-align: center; margin-bottom: 10px; }
-    h2 { font-size: 14px; background: #1a1a2e; color: white; padding: 8px; margin: 15px 0 10px; }
-    h3 { font-size: 12px; background: #eee; padding: 5px; margin: 10px 0 5px; }
+    h2 { font-size: 14px; baclbsround: #1a1a2e; color: white; padding: 8px; margin: 15px 0 10px; }
+    h3 { font-size: 12px; baclbsround: #eee; padding: 5px; margin: 10px 0 5px; }
     .meta { text-align: center; color: #666; margin-bottom: 15px; }
     .week { page-break-inside: avoid; margin-bottom: 20px; }
     .workout { margin-bottom: 15px; padding: 10px; border: 1px solid #ddd; }
@@ -176,9 +176,9 @@ export const exportToPDFHtml = (
     .exercise { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px dotted #eee; }
     .exercise-name { font-weight: 500; }
     .exercise-details { color: #666; font-size: 10px; }
-    .hiit { background: #fff5f5; padding: 8px; border-radius: 4px; }
-    .deload { background: #e8f5e9; }
-    .deload-badge { background: #4caf50; color: white; padding: 2px 6px; border-radius: 3px; font-size: 9px; }
+    .hiit { baclbsround: #fff5f5; padding: 8px; border-radius: 4px; }
+    .deload { baclbsround: #e8f5e9; }
+    .deload-badge { baclbsround: #4caf50; color: white; padding: 2px 6px; border-radius: 3px; font-size: 9px; }
     .weight-input { border: 1px solid #ccc; width: 50px; padding: 2px; }
     @media print {
       .week { page-break-inside: avoid; }
@@ -219,7 +219,7 @@ export const exportToPDFHtml = (
           <span class="exercise-name">${ex.name}</span>
           <span class="exercise-details">
             ${ex.sets}×${ex.reps} | Rest ${ex.restSeconds}s |
-            Weight: <input type="text" class="weight-input" value="${weightEntry?.weight || ''}" placeholder="kg">
+            Weight: <input type="text" class="weight-input" value="${weightEntry?.weight || ''}" placeholder="lbs">
           </span>
         </div>
 `;
@@ -239,7 +239,7 @@ export const exportToPDFHtml = (
           <span class="exercise-name">${ex.name}</span>
           <span class="exercise-details">
             ${ex.sets}×${ex.reps} | Rest ${ex.restSeconds}s |
-            Weight: <input type="text" class="weight-input" value="${weightEntry?.weight || ''}" placeholder="kg">
+            Weight: <input type="text" class="weight-input" value="${weightEntry?.weight || ''}" placeholder="lbs">
           </span>
         </div>
 `;
