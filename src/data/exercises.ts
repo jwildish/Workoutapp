@@ -1,88 +1,138 @@
 import { Exercise } from '../types';
 
+// Based on research-backed exercise selection (Schoenfeld et al., 2016; Krieger, 2010)
+// Compound movements prioritized for strength, isolation for hypertrophy
+
 export const strengthExercises: Exercise[] = [
-  // Chest
-  { id: 's1', name: 'Barbell Bench Press', muscleGroup: 'chest', type: 'strength', description: 'Compound chest movement for maximum strength' },
-  { id: 's2', name: 'Incline Dumbbell Press', muscleGroup: 'chest', type: 'strength', description: 'Upper chest focused pressing' },
+  // Upper Body Push - Compound
+  { id: 's1', name: 'Barbell Bench Press', muscleGroup: 'chest', type: 'strength', description: 'Primary horizontal push - chest, front delts, triceps' },
+  { id: 's2', name: 'Overhead Press', muscleGroup: 'shoulders', type: 'strength', description: 'Primary vertical push - delts, upper chest, triceps' },
+  { id: 's3', name: 'Incline Barbell Press', muscleGroup: 'chest', type: 'strength', description: 'Upper chest emphasis with shoulder involvement' },
+  { id: 's4', name: 'Close-Grip Bench Press', muscleGroup: 'triceps', type: 'strength', description: 'Tricep-focused pressing movement' },
 
-  // Back
-  { id: 's3', name: 'Barbell Deadlift', muscleGroup: 'back', type: 'strength', description: 'Full posterior chain compound lift' },
-  { id: 's4', name: 'Weighted Pull-ups', muscleGroup: 'back', type: 'strength', description: 'Vertical pulling for lat development' },
-  { id: 's5', name: 'Barbell Row', muscleGroup: 'back', type: 'strength', description: 'Horizontal rowing for back thickness' },
+  // Upper Body Pull - Compound
+  { id: 's5', name: 'Barbell Row', muscleGroup: 'back', type: 'strength', description: 'Horizontal pull - lats, rhomboids, rear delts' },
+  { id: 's6', name: 'Weighted Pull-ups', muscleGroup: 'back', type: 'strength', description: 'Vertical pull - lats, biceps, core' },
+  { id: 's7', name: 'Pendlay Row', muscleGroup: 'back', type: 'strength', description: 'Explosive horizontal pull from floor' },
+  { id: 's8', name: 'Weighted Chin-ups', muscleGroup: 'back', type: 'strength', description: 'Bicep-emphasized vertical pull' },
 
-  // Shoulders
-  { id: 's6', name: 'Overhead Press', muscleGroup: 'shoulders', type: 'strength', description: 'Compound shoulder pressing' },
-  { id: 's7', name: 'Push Press', muscleGroup: 'shoulders', type: 'strength', description: 'Explosive overhead movement' },
-
-  // Legs
-  { id: 's8', name: 'Barbell Back Squat', muscleGroup: 'quads', type: 'strength', description: 'King of leg exercises' },
-  { id: 's9', name: 'Front Squat', muscleGroup: 'quads', type: 'strength', description: 'Quad-dominant squatting' },
-  { id: 's10', name: 'Romanian Deadlift', muscleGroup: 'hamstrings', type: 'strength', description: 'Hamstring and glute focused' },
-  { id: 's11', name: 'Hip Thrust', muscleGroup: 'glutes', type: 'strength', description: 'Maximum glute activation' },
+  // Lower Body - Compound
+  { id: 's9', name: 'Barbell Back Squat', muscleGroup: 'quads', type: 'strength', description: 'King of lower body - quads, glutes, core' },
+  { id: 's10', name: 'Romanian Deadlift', muscleGroup: 'hamstrings', type: 'strength', description: 'Hip hinge - hamstrings, glutes, erectors' },
+  { id: 's11', name: 'Front Squat', muscleGroup: 'quads', type: 'strength', description: 'Quad-dominant with core emphasis' },
+  { id: 's12', name: 'Conventional Deadlift', muscleGroup: 'back', type: 'strength', description: 'Full posterior chain development' },
+  { id: 's13', name: 'Hip Thrust', muscleGroup: 'glutes', type: 'strength', description: 'Maximum glute activation (Contreras et al.)' },
+  { id: 's14', name: 'Bulgarian Split Squat', muscleGroup: 'quads', type: 'strength', description: 'Unilateral leg strength and balance' },
 ];
 
 export const hypertrophyExercises: Exercise[] = [
-  // Chest
-  { id: 'h1', name: 'Dumbbell Flyes', muscleGroup: 'chest', type: 'hypertrophy', description: 'Chest isolation for stretch' },
-  { id: 'h2', name: 'Cable Crossover', muscleGroup: 'chest', type: 'hypertrophy', description: 'Constant tension chest work' },
-  { id: 'h3', name: 'Incline Dumbbell Flyes', muscleGroup: 'chest', type: 'hypertrophy', description: 'Upper chest isolation' },
-  { id: 'h4', name: 'Machine Chest Press', muscleGroup: 'chest', type: 'hypertrophy', description: 'Controlled chest pressing' },
+  // Chest - Hypertrophy
+  { id: 'h1', name: 'Dumbbell Bench Press', muscleGroup: 'chest', type: 'hypertrophy', description: 'Greater ROM than barbell variation' },
+  { id: 'h2', name: 'Incline Dumbbell Press', muscleGroup: 'chest', type: 'hypertrophy', description: 'Upper chest focus with full stretch' },
+  { id: 'h3', name: 'Cable Flyes', muscleGroup: 'chest', type: 'hypertrophy', description: 'Constant tension through full ROM' },
+  { id: 'h4', name: 'Dips', muscleGroup: 'chest', type: 'hypertrophy', description: 'Lower chest and tricep emphasis' },
 
-  // Back
-  { id: 'h5', name: 'Lat Pulldown', muscleGroup: 'back', type: 'hypertrophy', description: 'Lat width development' },
-  { id: 'h6', name: 'Seated Cable Row', muscleGroup: 'back', type: 'hypertrophy', description: 'Back thickness builder' },
-  { id: 'h7', name: 'Single Arm Dumbbell Row', muscleGroup: 'back', type: 'hypertrophy', description: 'Unilateral back work' },
-  { id: 'h8', name: 'Face Pulls', muscleGroup: 'back', type: 'hypertrophy', description: 'Rear delt and upper back' },
+  // Back - Hypertrophy
+  { id: 'h5', name: 'Lat Pulldown', muscleGroup: 'back', type: 'hypertrophy', description: 'Lat isolation with controlled tempo' },
+  { id: 'h6', name: 'Seated Cable Row', muscleGroup: 'back', type: 'hypertrophy', description: 'Mid-back thickness builder' },
+  { id: 'h7', name: 'Single Arm Dumbbell Row', muscleGroup: 'back', type: 'hypertrophy', description: 'Unilateral back development' },
+  { id: 'h8', name: 'Face Pulls', muscleGroup: 'back', type: 'hypertrophy', description: 'Rear delts and external rotators' },
+  { id: 'h9', name: 'Straight Arm Pulldown', muscleGroup: 'back', type: 'hypertrophy', description: 'Lat isolation without bicep involvement' },
 
-  // Shoulders
-  { id: 'h9', name: 'Lateral Raises', muscleGroup: 'shoulders', type: 'hypertrophy', description: 'Side delt isolation' },
-  { id: 'h10', name: 'Front Raises', muscleGroup: 'shoulders', type: 'hypertrophy', description: 'Front delt targeting' },
-  { id: 'h11', name: 'Rear Delt Flyes', muscleGroup: 'shoulders', type: 'hypertrophy', description: 'Rear deltoid isolation' },
-  { id: 'h12', name: 'Arnold Press', muscleGroup: 'shoulders', type: 'hypertrophy', description: 'Full range shoulder press' },
+  // Shoulders - Hypertrophy
+  { id: 'h10', name: 'Lateral Raises', muscleGroup: 'shoulders', type: 'hypertrophy', description: 'Side delt isolation - key for width' },
+  { id: 'h11', name: 'Rear Delt Flyes', muscleGroup: 'shoulders', type: 'hypertrophy', description: 'Posterior deltoid isolation' },
+  { id: 'h12', name: 'Arnold Press', muscleGroup: 'shoulders', type: 'hypertrophy', description: 'Full delt activation through rotation' },
+  { id: 'h13', name: 'Cable Lateral Raises', muscleGroup: 'shoulders', type: 'hypertrophy', description: 'Constant tension lateral work' },
 
-  // Arms
-  { id: 'h13', name: 'Barbell Curl', muscleGroup: 'biceps', type: 'hypertrophy', description: 'Classic bicep builder' },
-  { id: 'h14', name: 'Hammer Curls', muscleGroup: 'biceps', type: 'hypertrophy', description: 'Brachialis and bicep work' },
-  { id: 'h15', name: 'Incline Dumbbell Curls', muscleGroup: 'biceps', type: 'hypertrophy', description: 'Stretched position curls' },
-  { id: 'h16', name: 'Tricep Pushdowns', muscleGroup: 'triceps', type: 'hypertrophy', description: 'Tricep isolation' },
-  { id: 'h17', name: 'Skull Crushers', muscleGroup: 'triceps', type: 'hypertrophy', description: 'Long head tricep focus' },
-  { id: 'h18', name: 'Overhead Tricep Extension', muscleGroup: 'triceps', type: 'hypertrophy', description: 'Stretched position tricep work' },
+  // Arms - Hypertrophy
+  { id: 'h14', name: 'Barbell Curl', muscleGroup: 'biceps', type: 'hypertrophy', description: 'Classic mass builder for biceps' },
+  { id: 'h15', name: 'Incline Dumbbell Curls', muscleGroup: 'biceps', type: 'hypertrophy', description: 'Long head emphasis at stretch' },
+  { id: 'h16', name: 'Hammer Curls', muscleGroup: 'biceps', type: 'hypertrophy', description: 'Brachialis and forearm development' },
+  { id: 'h17', name: 'Tricep Pushdowns', muscleGroup: 'triceps', type: 'hypertrophy', description: 'Lateral head isolation' },
+  { id: 'h18', name: 'Overhead Tricep Extension', muscleGroup: 'triceps', type: 'hypertrophy', description: 'Long head emphasis at stretch' },
+  { id: 'h19', name: 'Skull Crushers', muscleGroup: 'triceps', type: 'hypertrophy', description: 'All three heads with stretch' },
 
-  // Legs
-  { id: 'h19', name: 'Leg Press', muscleGroup: 'quads', type: 'hypertrophy', description: 'High volume quad work' },
-  { id: 'h20', name: 'Leg Extension', muscleGroup: 'quads', type: 'hypertrophy', description: 'Quad isolation' },
-  { id: 'h21', name: 'Walking Lunges', muscleGroup: 'quads', type: 'hypertrophy', description: 'Unilateral leg development' },
-  { id: 'h22', name: 'Leg Curl', muscleGroup: 'hamstrings', type: 'hypertrophy', description: 'Hamstring isolation' },
-  { id: 'h23', name: 'Stiff Leg Deadlift', muscleGroup: 'hamstrings', type: 'hypertrophy', description: 'Hamstring stretch and contract' },
-  { id: 'h24', name: 'Cable Pull Through', muscleGroup: 'glutes', type: 'hypertrophy', description: 'Glute focused hinge' },
-  { id: 'h25', name: 'Bulgarian Split Squat', muscleGroup: 'glutes', type: 'hypertrophy', description: 'Single leg glute builder' },
-  { id: 'h26', name: 'Calf Raises', muscleGroup: 'calves', type: 'hypertrophy', description: 'Calf development' },
+  // Lower Body - Hypertrophy
+  { id: 'h20', name: 'Leg Press', muscleGroup: 'quads', type: 'hypertrophy', description: 'High volume quad work without spinal load' },
+  { id: 'h21', name: 'Leg Extension', muscleGroup: 'quads', type: 'hypertrophy', description: 'Quad isolation - rectus femoris focus' },
+  { id: 'h22', name: 'Walking Lunges', muscleGroup: 'quads', type: 'hypertrophy', description: 'Unilateral with glute stretch' },
+  { id: 'h23', name: 'Leg Curl', muscleGroup: 'hamstrings', type: 'hypertrophy', description: 'Hamstring isolation at knee' },
+  { id: 'h24', name: 'Stiff Leg Deadlift', muscleGroup: 'hamstrings', type: 'hypertrophy', description: 'Hamstring emphasis hip hinge' },
+  { id: 'h25', name: 'Glute Bridge', muscleGroup: 'glutes', type: 'hypertrophy', description: 'Glute activation and hypertrophy' },
+  { id: 'h26', name: 'Cable Pull Through', muscleGroup: 'glutes', type: 'hypertrophy', description: 'Hip hinge pattern with constant tension' },
+  { id: 'h27', name: 'Standing Calf Raises', muscleGroup: 'calves', type: 'hypertrophy', description: 'Gastrocnemius emphasis' },
+  { id: 'h28', name: 'Seated Calf Raises', muscleGroup: 'calves', type: 'hypertrophy', description: 'Soleus emphasis' },
 
   // Core
-  { id: 'h27', name: 'Cable Crunches', muscleGroup: 'core', type: 'hypertrophy', description: 'Weighted ab work' },
-  { id: 'h28', name: 'Hanging Leg Raises', muscleGroup: 'core', type: 'hypertrophy', description: 'Lower ab focus' },
+  { id: 'h29', name: 'Cable Crunches', muscleGroup: 'core', type: 'hypertrophy', description: 'Weighted ab flexion' },
+  { id: 'h30', name: 'Hanging Leg Raises', muscleGroup: 'core', type: 'hypertrophy', description: 'Lower ab and hip flexor work' },
 ];
 
+// HIIT exercises - includes cardio and core work
 export const hiitExercises: Exercise[] = [
-  { id: 'hiit1', name: 'Burpees', muscleGroup: 'full-body', type: 'hiit', description: 'Full body explosive movement' },
-  { id: 'hiit2', name: 'Mountain Climbers', muscleGroup: 'core', type: 'hiit', description: 'Core and cardio combo' },
-  { id: 'hiit3', name: 'Jump Squats', muscleGroup: 'quads', type: 'hiit', description: 'Explosive leg power' },
-  { id: 'hiit4', name: 'Box Jumps', muscleGroup: 'quads', type: 'hiit', description: 'Plyometric leg training' },
-  { id: 'hiit5', name: 'Battle Ropes', muscleGroup: 'full-body', type: 'hiit', description: 'Upper body cardio blast' },
-  { id: 'hiit6', name: 'Kettlebell Swings', muscleGroup: 'full-body', type: 'hiit', description: 'Hip hinge cardio' },
-  { id: 'hiit7', name: 'Rowing Sprints', muscleGroup: 'full-body', type: 'hiit', description: 'Full body cardio' },
-  { id: 'hiit8', name: 'Bike Sprints', muscleGroup: 'quads', type: 'hiit', description: 'Lower body cardio blast' },
-  { id: 'hiit9', name: 'High Knees', muscleGroup: 'core', type: 'hiit', description: 'Running in place' },
-  { id: 'hiit10', name: 'Jumping Lunges', muscleGroup: 'quads', type: 'hiit', description: 'Explosive lunge variation' },
-  { id: 'hiit11', name: 'Plyo Push-ups', muscleGroup: 'chest', type: 'hiit', description: 'Explosive upper body' },
-  { id: 'hiit12', name: 'Sled Push', muscleGroup: 'full-body', type: 'hiit', description: 'Leg drive cardio' },
+  // Full body cardio
+  { id: 'hiit1', name: 'Burpees', muscleGroup: 'full-body', type: 'hiit', description: 'Full body conditioning' },
+  { id: 'hiit2', name: 'Kettlebell Swings', muscleGroup: 'full-body', type: 'hiit', description: 'Hip hinge cardio' },
+  { id: 'hiit3', name: 'Battle Ropes', muscleGroup: 'full-body', type: 'hiit', description: 'Upper body conditioning' },
+
+  // Lower body
+  { id: 'hiit4', name: 'Jump Squats', muscleGroup: 'quads', type: 'hiit', description: 'Lower body power' },
+  { id: 'hiit5', name: 'Box Jumps', muscleGroup: 'quads', type: 'hiit', description: 'Plyometric power' },
+  { id: 'hiit6', name: 'Jumping Lunges', muscleGroup: 'quads', type: 'hiit', description: 'Unilateral leg power' },
+
+  // Core/Ab exercises (at least 2 per HIIT session)
+  { id: 'hiit7', name: 'Mountain Climbers', muscleGroup: 'core', type: 'hiit', description: 'Core and cardio' },
+  { id: 'hiit8', name: 'Bicycle Crunches', muscleGroup: 'core', type: 'hiit', description: 'Obliques and rectus abdominis' },
+  { id: 'hiit9', name: 'Plank to Push-up', muscleGroup: 'core', type: 'hiit', description: 'Core stability with movement' },
+  { id: 'hiit10', name: 'V-Ups', muscleGroup: 'core', type: 'hiit', description: 'Full ab contraction' },
+  { id: 'hiit11', name: 'Russian Twists', muscleGroup: 'core', type: 'hiit', description: 'Rotational core work' },
+  { id: 'hiit12', name: 'Dead Bug', muscleGroup: 'core', type: 'hiit', description: 'Anti-extension core stability' },
+  { id: 'hiit13', name: 'Flutter Kicks', muscleGroup: 'core', type: 'hiit', description: 'Lower ab endurance' },
+  { id: 'hiit14', name: 'Plank Jacks', muscleGroup: 'core', type: 'hiit', description: 'Core stability with cardio' },
 ];
 
+// 4-Day Upper/Lower Split based on research (Schoenfeld et al., 2015)
+// Each muscle trained 2x/week for optimal hypertrophy
 export const workoutSplits = {
-  push: ['chest', 'shoulders', 'triceps'] as const,
-  pull: ['back', 'biceps'] as const,
-  legs: ['quads', 'hamstrings', 'glutes', 'calves'] as const,
-  upper: ['chest', 'back', 'shoulders', 'biceps', 'triceps'] as const,
-  lower: ['quads', 'hamstrings', 'glutes', 'calves'] as const,
-  fullBody: ['chest', 'back', 'shoulders', 'quads', 'hamstrings', 'glutes'] as const,
+  upperA: {
+    name: 'Upper A (Push Focus)',
+    strength: ['chest', 'shoulders'] as const,
+    hypertrophy: ['chest', 'triceps', 'shoulders', 'back'] as const,
+    description: 'Horizontal push emphasis with back work'
+  },
+  lowerA: {
+    name: 'Lower A (Quad Focus)',
+    strength: ['quads'] as const,
+    hypertrophy: ['quads', 'hamstrings', 'glutes', 'calves'] as const,
+    description: 'Squat pattern emphasis'
+  },
+  upperB: {
+    name: 'Upper B (Pull Focus)',
+    strength: ['back'] as const,
+    hypertrophy: ['back', 'biceps', 'shoulders', 'chest'] as const,
+    description: 'Vertical and horizontal pull emphasis'
+  },
+  lowerB: {
+    name: 'Lower B (Hinge Focus)',
+    strength: ['hamstrings', 'glutes'] as const,
+    hypertrophy: ['hamstrings', 'glutes', 'quads', 'calves'] as const,
+    description: 'Hip hinge pattern emphasis'
+  }
+};
+
+// Progressive overload recommendations based on Prilepin's Chart and modern research
+export const progressionRules = {
+  compound: {
+    weeklyIncrease: 2.5, // kg for upper body compounds
+    deloadReduction: 0.6, // 60% of working weight
+  },
+  isolation: {
+    weeklyIncrease: 1.25, // kg for isolation movements
+    deloadReduction: 0.5, // 50% of working weight
+  },
+  lowerCompound: {
+    weeklyIncrease: 5, // kg for squats/deadlifts
+    deloadReduction: 0.6,
+  }
 };

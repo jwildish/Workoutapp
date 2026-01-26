@@ -1,20 +1,25 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { HIITInterval } from '../types';
+import { HIITSection } from '../types';
 
 interface Props {
-  interval: HIITInterval;
+  hiitSection: HIITSection;
   onComplete: () => void;
 }
 
 type HIITPhase = 'ready' | 'work' | 'rest' | 'complete';
 
-export const HIITTimer: React.FC<Props> = ({ interval, onComplete }) => {
+export const HIITTimer: React.FC<Props> = ({ hiitSection, onComplete }) => {
   const [phase, setPhase] = useState<HIITPhase>('ready');
   const [currentRound, setCurrentRound] = useState(1);
-  const [timeRemaining, setTimeRemaining] = useState(3); // 3 second countdown to start
+  const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
+  const [timeRemaining, setTimeRemaining] = useState(3);
   const [isRunning, setIsRunning] = useState(false);
 
-  const totalTime = (interval.workSeconds + interval.restSeconds) * interval.rounds;
+  const exercises = hiitSection.exercises;
+  const totalExercises = exercises.length;
+  const totalTime = hiitSection.totalDuration;
+
+  const currentExercise = exercises[currentExerciseIndex];
 
   const handleStart = () => {
     setIsRunning(true);
@@ -25,22 +30,37 @@ export const HIITTimer: React.FC<Props> = ({ interval, onComplete }) => {
   const moveToNextPhase = useCallback(() => {
     if (phase === 'ready') {
       setPhase('work');
-      setTimeRemaining(interval.workSeconds);
+      setTimeRemaining(hiitSection.workSeconds);
     } else if (phase === 'work') {
-      if (currentRound >= interval.rounds) {
-        setPhase('complete');
-        setIsRunning(false);
-        onComplete();
-      } else {
-        setPhase('rest');
-        setTimeRemaining(interval.restSeconds);
-      }
+      // Move to rest after work
+      setPhase('rest');
+      setTimeRemaining(hiitSection.restSeconds);
     } else if (phase === 'rest') {
-      setCurrentRound(prev => prev + 1);
-      setPhase('work');
-      setTimeRemaining(interval.workSeconds);
+      // Move to next exercise or next round
+      const nextExerciseIndex = currentExerciseIndex + 1;
+
+      if (nextExerciseIndex >= totalExercises) {
+        // Completed all exercises in this round
+        if (currentRound >= hiitSection.rounds) {
+          // Completed all rounds
+          setPhase('complete');
+          setIsRunning(false);
+          onComplete();
+        } else {
+          // Start next round
+          setCurrentRound(prev => prev + 1);
+          setCurrentExerciseIndex(0);
+          setPhase('work');
+          setTimeRemaining(hiitSection.workSeconds);
+        }
+      } else {
+        // Move to next exercise
+        setCurrentExerciseIndex(nextExerciseIndex);
+        setPhase('work');
+        setTimeRemaining(hiitSection.workSeconds);
+      }
     }
-  }, [phase, currentRound, interval, onComplete]);
+  }, [phase, currentRound, currentExerciseIndex, totalExercises, hiitSection, onComplete]);
 
   useEffect(() => {
     if (!isRunning || phase === 'complete') return;
@@ -65,13 +85,14 @@ export const HIITTimer: React.FC<Props> = ({ interval, onComplete }) => {
   };
 
   const getProgressPercentage = (): number => {
-    const completedRounds = currentRound - 1;
-    const roundProgress = phase === 'work'
-      ? (interval.workSeconds - timeRemaining) / (interval.workSeconds + interval.restSeconds)
+    const totalCycles = hiitSection.rounds * totalExercises;
+    const completedCycles = (currentRound - 1) * totalExercises + currentExerciseIndex;
+    const cycleProgress = phase === 'work'
+      ? (hiitSection.workSeconds - timeRemaining) / (hiitSection.workSeconds + hiitSection.restSeconds)
       : phase === 'rest'
-        ? (interval.workSeconds + interval.restSeconds - timeRemaining) / (interval.workSeconds + interval.restSeconds)
+        ? (hiitSection.workSeconds + hiitSection.restSeconds - timeRemaining) / (hiitSection.workSeconds + hiitSection.restSeconds)
         : 0;
-    return ((completedRounds + roundProgress) / interval.rounds) * 100;
+    return ((completedCycles + cycleProgress) / totalCycles) * 100;
   };
 
   if (!isRunning && phase === 'ready') {
@@ -79,18 +100,29 @@ export const HIITTimer: React.FC<Props> = ({ interval, onComplete }) => {
       <div className="hiit-timer ready-state">
         <h2>HIIT Finisher</h2>
         <div className="hiit-info">
-          <h3>{interval.name}</h3>
+          <h3>{exercises.length} Exercises Circuit</h3>
+          <div className="hiit-exercise-list">
+            {exercises.map((ex, idx) => (
+              <span
+                key={idx}
+                className={`hiit-exercise-preview ${ex.muscleGroup === 'core' ? 'core-exercise' : ''}`}
+              >
+                {ex.muscleGroup === 'core' && '🔥 '}
+                {ex.name}
+              </span>
+            ))}
+          </div>
           <div className="hiit-details">
             <div className="detail">
-              <span className="value">{interval.rounds}</span>
+              <span className="value">{hiitSection.rounds}</span>
               <span className="label">Rounds</span>
             </div>
             <div className="detail">
-              <span className="value">{interval.workSeconds}s</span>
+              <span className="value">{hiitSection.workSeconds}s</span>
               <span className="label">Work</span>
             </div>
             <div className="detail">
-              <span className="value">{interval.restSeconds}s</span>
+              <span className="value">{hiitSection.restSeconds}s</span>
               <span className="label">Rest</span>
             </div>
             <div className="detail">
@@ -109,8 +141,10 @@ export const HIITTimer: React.FC<Props> = ({ interval, onComplete }) => {
   return (
     <div className={`hiit-timer ${phase}`}>
       <div className="hiit-header">
-        <h2>{interval.name}</h2>
-        <span className="round-indicator">Round {currentRound} of {interval.rounds}</span>
+        <h2>Round {currentRound} of {hiitSection.rounds}</h2>
+        <span className="round-indicator">
+          Exercise {currentExerciseIndex + 1} of {totalExercises}
+        </span>
       </div>
 
       <div className="timer-display">
@@ -118,12 +152,17 @@ export const HIITTimer: React.FC<Props> = ({ interval, onComplete }) => {
           <>
             <div className="phase-label get-ready">GET READY</div>
             <div className="countdown">{timeRemaining}</div>
+            <div className="instruction">First up: {exercises[0].name}</div>
           </>
         )}
 
         {phase === 'work' && (
           <>
             <div className="phase-label work">WORK!</div>
+            <div className="current-exercise-name">
+              {currentExercise.muscleGroup === 'core' && '🔥 '}
+              {currentExercise.name}
+            </div>
             <div className="time-remaining">{timeRemaining}</div>
             <div className="instruction">Go all out!</div>
           </>
@@ -133,7 +172,9 @@ export const HIITTimer: React.FC<Props> = ({ interval, onComplete }) => {
           <>
             <div className="phase-label rest">REST</div>
             <div className="time-remaining">{timeRemaining}</div>
-            <div className="instruction">Catch your breath</div>
+            <div className="instruction">
+              Next: {exercises[(currentExerciseIndex + 1) % totalExercises]?.name || exercises[0].name}
+            </div>
           </>
         )}
 
@@ -152,8 +193,18 @@ export const HIITTimer: React.FC<Props> = ({ interval, onComplete }) => {
         />
       </div>
 
+      <div className="exercise-indicators">
+        {exercises.map((ex, i) => (
+          <div
+            key={i}
+            className={`exercise-dot ${i < currentExerciseIndex ? 'completed' : ''} ${i === currentExerciseIndex ? 'current' : ''} ${ex.muscleGroup === 'core' ? 'core' : ''}`}
+            title={ex.name}
+          />
+        ))}
+      </div>
+
       <div className="rounds-display">
-        {Array.from({ length: interval.rounds }).map((_, i) => (
+        {Array.from({ length: hiitSection.rounds }).map((_, i) => (
           <div
             key={i}
             className={`round-dot ${i < currentRound - 1 ? 'completed' : ''} ${i === currentRound - 1 ? 'current' : ''}`}

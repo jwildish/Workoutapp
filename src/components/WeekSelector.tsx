@@ -15,15 +15,18 @@ export const WeekSelector: React.FC<Props> = ({ weeks, selectedWeek, onWeekSelec
         {weeks.map((weekPlan) => (
           <button
             key={weekPlan.week}
-            className={`week-button ${selectedWeek === weekPlan.week ? 'active' : ''}`}
+            className={`week-button ${selectedWeek === weekPlan.week ? 'active' : ''} ${weekPlan.isDeload ? 'deload-week' : ''}`}
             onClick={() => onWeekSelect(weekPlan.week)}
           >
-            <span className="week-number">Week {weekPlan.week}</span>
+            <span className="week-number">
+              Week {weekPlan.week}
+              {weekPlan.isDeload && <span className="deload-tag">Deload</span>}
+            </span>
             <span className="intensity-bar">
-              {Array.from({ length: 10 }).map((_, i) => (
+              {Array.from({ length: 8 }).map((_, i) => (
                 <span
                   key={i}
-                  className={`intensity-dot ${i < weekPlan.intensityLevel ? 'filled' : ''}`}
+                  className={`intensity-dot ${i < weekPlan.intensityLevel ? 'filled' : ''} ${weekPlan.isDeload ? 'deload-dot' : ''}`}
                 />
               ))}
             </span>
@@ -31,7 +34,7 @@ export const WeekSelector: React.FC<Props> = ({ weeks, selectedWeek, onWeekSelec
         ))}
       </div>
       {weeks[selectedWeek - 1] && (
-        <div className="week-focus">
+        <div className={`week-focus ${weeks[selectedWeek - 1].isDeload ? 'deload-focus' : ''}`}>
           <strong>Focus:</strong> {weeks[selectedWeek - 1].focus}
         </div>
       )}

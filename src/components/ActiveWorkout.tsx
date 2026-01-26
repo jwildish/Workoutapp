@@ -119,7 +119,7 @@ export const ActiveWorkout: React.FC<Props> = ({ workout, onComplete, onExit }) 
         </div>
         {renderPhaseIndicator()}
         <HIITTimer
-          interval={workout.hiitSection}
+          hiitSection={workout.hiitSection}
           onComplete={handleHIITComplete}
         />
       </div>

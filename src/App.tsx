@@ -5,6 +5,7 @@ import { WorkoutSettingsComponent } from './components/WorkoutSettings';
 import { WeekSelector } from './components/WeekSelector';
 import { WorkoutCard } from './components/WorkoutCard';
 import { ActiveWorkout } from './components/ActiveWorkout';
+import { exportToText, copyToClipboard, downloadAsPDF, downloadAsText } from './utils/exportPlan';
 import './App.css';
 
 type View = 'planner' | 'workout';
@@ -17,6 +18,8 @@ function App() {
   const [activeWorkout, setActiveWorkout] = useState<Workout | null>(null);
   const [view, setView] = useState<View>('planner');
   const [showSettings, setShowSettings] = useState(false);
+  const [showExport, setShowExport] = useState(false);
+  const [copySuccess, setCopySuccess] = useState(false);
 
   useEffect(() => {
     const plan = generate8WeekPlan(settings);
@@ -40,6 +43,24 @@ function App() {
   const handleRegeneratePlan = () => {
     const plan = generate8WeekPlan(settings);
     setWeekPlans(plan);
+    setSelectedDay(null);
+  };
+
+  const handleCopyToClipboard = async () => {
+    const text = exportToText(weekPlans, settings);
+    const success = await copyToClipboard(text);
+    if (success) {
+      setCopySuccess(true);
+      setTimeout(() => setCopySuccess(false), 2000);
+    }
+  };
+
+  const handleDownloadPDF = () => {
+    downloadAsPDF(weekPlans, settings);
+  };
+
+  const handleDownloadText = () => {
+    downloadAsText(weekPlans, settings);
   };
 
   const currentWeekPlan = weekPlans[selectedWeek - 1];
@@ -62,12 +83,18 @@ function App() {
         <div className="header-actions">
           <button
             className="settings-toggle"
-            onClick={() => setShowSettings(!showSettings)}
+            onClick={() => { setShowSettings(!showSettings); setShowExport(false); }}
           >
             {showSettings ? 'Hide Settings' : 'Settings'}
           </button>
+          <button
+            className="export-toggle"
+            onClick={() => { setShowExport(!showExport); setShowSettings(false); }}
+          >
+            {showExport ? 'Hide Export' : 'Export Plan'}
+          </button>
           <button className="regenerate-btn" onClick={handleRegeneratePlan}>
-            Regenerate Plan
+            Regenerate
           </button>
         </div>
       </header>
@@ -77,6 +104,27 @@ function App() {
           settings={settings}
           onSettingsChange={setSettings}
         />
+      )}
+
+      {showExport && (
+        <div className="export-panel">
+          <h3>Export Your Plan</h3>
+          <p>Save your 8-week program with all exercises and weight suggestions.</p>
+          <div className="export-buttons">
+            <button onClick={handleCopyToClipboard} className="export-btn copy-btn">
+              {copySuccess ? 'Copied!' : 'Copy to Clipboard'}
+              <span className="export-hint">Paste into Apple Notes</span>
+            </button>
+            <button onClick={handleDownloadText} className="export-btn text-btn">
+              Download as Text
+              <span className="export-hint">.txt file</span>
+            </button>
+            <button onClick={handleDownloadPDF} className="export-btn pdf-btn">
+              Print / Save as PDF
+              <span className="export-hint">Opens print dialog</span>
+            </button>
+          </div>
+        </div>
       )}
 
       <main className="app-main">
@@ -122,9 +170,17 @@ function App() {
         <div className="program-info">
           <h4>Program Structure</h4>
           <ul>
-            <li><strong>Strength Phase:</strong> 2 exercises, heavy weight, 3-5 reps</li>
-            <li><strong>Hypertrophy Phase:</strong> 3 exercises, moderate weight, 10-15 reps</li>
-            <li><strong>HIIT Finisher:</strong> 8 minutes high-intensity intervals</li>
+            <li><strong>4 Days/Week:</strong> Upper/Lower split for optimal recovery</li>
+            <li><strong>Strength:</strong> 2 exercises, heavy weight, 4-6 reps</li>
+            <li><strong>Hypertrophy:</strong> 3 exercises, moderate weight, 8-12 reps</li>
+            <li><strong>HIIT:</strong> 8 min with 4 exercises (2+ ab exercises)</li>
+            <li><strong>Week 4:</strong> Deload week for recovery</li>
+          </ul>
+          <h4 style={{marginTop: '15px'}}>Progressive Overload</h4>
+          <ul>
+            <li>Upper compounds: +2.5kg/week</li>
+            <li>Lower compounds: +5kg/week</li>
+            <li>Isolation: +1.25kg/week</li>
           </ul>
         </div>
       </footer>
