@@ -1201,3 +1201,533 @@ body {
   background: var(--accent);
   box-shadow: 0 0 10px rgba(253, 121, 168, 0.5);
 }
+
+/* ======================================
+   LOGIN SCREEN STYLES
+   ====================================== */
+
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: linear-gradient(135deg, var(--background) 0%, var(--surface) 100%);
+}
+
+.login-card {
+  background: var(--surface);
+  border-radius: var(--border-radius);
+  padding: 40px;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.login-header {
+  margin-bottom: 30px;
+}
+
+.login-header h1 {
+  font-size: 2rem;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+}
+
+.login-header p {
+  color: var(--text-secondary);
+}
+
+.login-features {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 30px;
+  text-align: left;
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 15px;
+  background: var(--surface-light);
+  border-radius: 8px;
+}
+
+.feature-icon {
+  font-size: 1.2rem;
+}
+
+.login-error {
+  background: rgba(225, 112, 85, 0.2);
+  color: var(--danger);
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+}
+
+.google-sign-in-btn {
+  width: 100%;
+  padding: 14px 24px;
+  border: none;
+  border-radius: var(--border-radius);
+  background: white;
+  color: #333;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  transition: var(--transition);
+}
+
+.google-sign-in-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
+}
+
+.google-sign-in-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.google-icon {
+  flex-shrink: 0;
+}
+
+.login-note {
+  margin-top: 20px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+/* ======================================
+   USER HEADER STYLES
+   ====================================== */
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--surface-light);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--primary);
+}
+
+.user-name {
+  font-weight: 500;
+  color: var(--text);
+}
+
+.sign-out-btn {
+  padding: 8px 16px;
+  border: 1px solid var(--surface-light);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.sign-out-btn:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+/* ======================================
+   LOADING SCREEN STYLES
+   ====================================== */
+
+.loading-screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid var(--surface-light);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ======================================
+   WORKOUT HISTORY SUMMARY
+   ====================================== */
+
+.workout-history-summary {
+  background: var(--surface);
+  padding: 20px;
+  border-radius: var(--border-radius);
+  margin-bottom: 30px;
+}
+
+.workout-history-summary h4 {
+  margin-bottom: 15px;
+  color: var(--secondary);
+}
+
+.history-stats {
+  display: flex;
+  gap: 30px;
+}
+
+.history-stats .stat {
+  text-align: center;
+}
+
+.history-stats .stat-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.history-stats .stat-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* ======================================
+   STRONG-STYLE ACTIVE WORKOUT UI
+   ====================================== */
+
+.active-workout.strong-style {
+  padding-bottom: 100px;
+}
+
+.workout-content {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.phase-section {
+  margin-bottom: 30px;
+}
+
+.phase-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--surface-light);
+}
+
+.phase-section-header h3 {
+  font-size: 1.3rem;
+  color: var(--primary);
+}
+
+.phase-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* Exercise Card (Strong-style) */
+.exercise-card-strong {
+  background: var(--surface);
+  border-radius: var(--border-radius);
+  margin-bottom: 12px;
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.exercise-card-strong.completed {
+  opacity: 0.7;
+}
+
+.exercise-card-strong.completed .exercise-card-header {
+  background: rgba(0, 184, 148, 0.1);
+}
+
+.exercise-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.exercise-card-header:hover {
+  background: var(--surface-light);
+}
+
+.exercise-card-strong .exercise-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.completion-check {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--surface-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  color: transparent;
+  transition: var(--transition);
+}
+
+.completion-check.visible {
+  background: var(--success);
+  color: white;
+}
+
+.exercise-card-strong h4 {
+  font-size: 1.1rem;
+  margin-bottom: 2px;
+}
+
+.muscle-tag-small {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-transform: capitalize;
+}
+
+.sets-summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.expand-icon {
+  transition: transform 0.3s ease;
+  font-size: 0.7rem;
+}
+
+.expand-icon.expanded {
+  transform: rotate(180deg);
+}
+
+/* Sets Container */
+.exercise-sets-container {
+  padding: 0 20px 20px;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sets-header {
+  display: grid;
+  grid-template-columns: 50px 80px 1fr 1fr 50px;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--surface-light);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.set-row {
+  display: grid;
+  grid-template-columns: 50px 80px 1fr 1fr 50px;
+  gap: 10px;
+  padding: 12px 0;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: var(--transition);
+}
+
+.set-row.completed {
+  background: rgba(0, 184, 148, 0.1);
+}
+
+.set-col {
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.previous-col {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.weight-input-strong,
+.reps-input-strong {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--surface-light);
+  border-radius: 8px;
+  background: var(--surface-light);
+  color: var(--text);
+  font-size: 1rem;
+  text-align: center;
+  transition: var(--transition);
+}
+
+.weight-input-strong:focus,
+.reps-input-strong:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: var(--surface);
+}
+
+.weight-input-strong::placeholder,
+.reps-input-strong::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.5;
+}
+
+/* Hide number input spinners */
+.weight-input-strong::-webkit-inner-spin-button,
+.weight-input-strong::-webkit-outer-spin-button,
+.reps-input-strong::-webkit-inner-spin-button,
+.reps-input-strong::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.set-check-btn {
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--surface-light);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.set-check-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.set-check-btn.checked {
+  background: var(--success);
+  border-color: var(--success);
+  color: white;
+}
+
+.exercise-notes {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--surface-light);
+}
+
+.weight-hint {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* Workout Actions */
+.workout-actions {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 15px 20px;
+  background: linear-gradient(to top, var(--background) 0%, var(--background) 80%, transparent 100%);
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.secondary-btn {
+  padding: 14px 28px;
+  border: 2px solid var(--surface-light);
+  border-radius: var(--border-radius);
+  background: transparent;
+  color: var(--text);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.secondary-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.workout-actions .primary-btn {
+  flex: 1;
+  max-width: 250px;
+}
+
+.workout-actions .primary-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Mobile adjustments for Strong-style UI */
+@media (max-width: 600px) {
+  .sets-header {
+    grid-template-columns: 40px 60px 1fr 1fr 40px;
+    font-size: 0.65rem;
+  }
+
+  .set-row {
+    grid-template-columns: 40px 60px 1fr 1fr 40px;
+  }
+
+  .weight-input-strong,
+  .reps-input-strong {
+    padding: 8px;
+    font-size: 0.9rem;
+  }
+
+  .set-check-btn {
+    width: 35px;
+    height: 35px;
+  }
+
+  .workout-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .workout-actions .primary-btn {
+    max-width: none;
+  }
+}

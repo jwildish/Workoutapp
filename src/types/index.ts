@@ -80,13 +80,57 @@ export interface WeightEntry {
   exerciseId: string;
   week: number;
   day: number;
-  weight: number; // in kg
+  weight: number; // in lbs
   reps: number;
   date: string;
 }
 
 export interface UserWeights {
   [exerciseId: string]: WeightEntry[];
+}
+
+// Set tracking during workout (Strong-style)
+export interface ExerciseSet {
+  setNumber: number;
+  weight: number; // in lbs
+  reps: number;
+  completed: boolean;
+}
+
+export interface ExerciseLog {
+  exerciseId: string;
+  exerciseName: string;
+  muscleGroup: MuscleGroup;
+  sets: ExerciseSet[];
+  isStrength: boolean;
+}
+
+// Completed workout history
+export interface CompletedWorkout {
+  id: string;
+  odId: string;
+  week: number;
+  day: number;
+  workoutName: string;
+  completedAt: string;
+  duration: number; // actual duration in minutes
+  exercises: ExerciseLog[];
+  hiitCompleted: boolean;
+  notes?: string;
+}
+
+// User data stored in Firestore
+export interface UserData {
+  odId: string;
+  email: string;
+  displayName: string;
+  photoURL?: string;
+  createdAt: string;
+  currentPlan?: WeekPlan[];
+  planSettings?: WorkoutSettings;
+  planGeneratedAt?: string;
+  workoutHistory: CompletedWorkout[];
+  weightHistory: UserWeights;
 }
 
 // For export
