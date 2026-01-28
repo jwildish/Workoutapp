@@ -59,6 +59,31 @@ export interface WarmupSection {
   totalDuration: number; // in seconds
 }
 
+export interface CorrectiveExercise {
+  id: string;
+  name: string;
+  duration: number; // in seconds
+  reps?: string; // optional rep count
+  description: string;
+}
+
+export interface CorrectivesSection {
+  exercises: CorrectiveExercise[];
+  totalDuration: number; // in seconds
+}
+
+export interface YogaExercise {
+  id: string;
+  name: string;
+  duration: number; // in seconds
+  description: string;
+}
+
+export interface YogaSection {
+  exercises: YogaExercise[];
+  totalDuration: number; // 2 minutes = 120 seconds
+}
+
 export interface Workout {
   id: string;
   week: number;
@@ -69,7 +94,9 @@ export interface Workout {
   warmupSection: WarmupSection;
   strengthExercises: WorkoutExercise[];
   hypertrophyExercises: WorkoutExercise[];
+  correctivesSection: CorrectivesSection;
   hiitSection: HIITSection;
+  yogaSection: YogaSection;
   totalDurationMinutes: number;
   isDeload: boolean;
 }

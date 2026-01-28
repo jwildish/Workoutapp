@@ -2014,3 +2014,51 @@ body {
     width: 100%;
   }
 }
+
+/* ======================================
+   CORRECTIVES SECTION STYLES
+   ====================================== */
+
+.correctives-section {
+  background: rgba(253, 203, 110, 0.1);
+  border-left: 4px solid var(--warning);
+}
+
+.correctives-exercises {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.correctives-tag {
+  background: rgba(253, 203, 110, 0.2);
+  color: var(--warning);
+  border: 1px solid var(--warning);
+  padding: 6px 12px;
+  border-radius: 15px;
+  font-size: 0.85rem;
+}
+
+/* ======================================
+   YOGA SECTION STYLES
+   ====================================== */
+
+.yoga-section {
+  background: rgba(108, 92, 231, 0.1);
+  border-left: 4px solid var(--primary);
+}
+
+.yoga-exercises {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.yoga-tag {
+  background: rgba(108, 92, 231, 0.2);
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  padding: 6px 12px;
+  border-radius: 15px;
+  font-size: 0.85rem;
+}

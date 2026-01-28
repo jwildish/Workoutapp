@@ -84,6 +84,40 @@ export const warmupExercises: WarmupExercise[] = [
   { id: 'w12', name: 'Scapular Push-ups', duration: 30, description: 'Shoulder blade activation', category: 'activation' },
 ];
 
+// Correctives exercises - mobility and stability work
+export interface CorrectiveExercise {
+  id: string;
+  name: string;
+  duration: number; // in seconds
+  reps?: string;
+  description: string;
+}
+
+export const correctivesExercises: CorrectiveExercise[] = [
+  { id: 'c1', name: 'Side Leg Raises', duration: 30, reps: '10 each side', description: 'Hip abductor activation and stability' },
+  { id: 'c2', name: 'Chair Pose with Arms Overhead', duration: 30, description: 'Lower body isometric hold with shoulder mobility' },
+  { id: 'c3', name: 'Band Pull-Aparts', duration: 30, reps: '15', description: 'Rear delt and upper back strengthening' },
+  { id: 'c4', name: 'Face Pull and Hold', duration: 30, reps: '10 with 3s hold', description: 'External rotation and scapular retraction' },
+];
+
+// Yoga flow exercises - 2 minute cooldown routine
+export interface YogaExercise {
+  id: string;
+  name: string;
+  duration: number; // in seconds
+  description: string;
+}
+
+export const yogaExercises: YogaExercise[] = [
+  { id: 'y1', name: 'Child\'s Pose', duration: 20, description: 'Rest and stretch the back, hips, and thighs' },
+  { id: 'y2', name: 'Downward Dog', duration: 20, description: 'Full body stretch, hamstrings and shoulders' },
+  { id: 'y3', name: 'Low Lunge (Right)', duration: 15, description: 'Hip flexor stretch' },
+  { id: 'y4', name: 'Low Lunge (Left)', duration: 15, description: 'Hip flexor stretch' },
+  { id: 'y5', name: 'Pigeon Pose (Right)', duration: 15, description: 'Deep hip opener' },
+  { id: 'y6', name: 'Pigeon Pose (Left)', duration: 15, description: 'Deep hip opener' },
+  { id: 'y7', name: 'Seated Forward Fold', duration: 20, description: 'Hamstring and lower back stretch' },
+];
+
 // Progressive overload recommendations based on Prilepin's Chart and modern research
 export const progressionRules = {
   compound: {

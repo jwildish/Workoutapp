@@ -1,5 +1,5 @@
-import { Exercise, Workout, WorkoutExercise, WeekPlan, HIITSection, HIITExercise, MuscleGroup, WorkoutSettings, WarmupSection, WarmupExercise } from '../types';
-import { strengthExercises, hypertrophyExercises, hiitExercises, progressionRules, warmupExercises } from '../data/exercises';
+import { Exercise, Workout, WorkoutExercise, WeekPlan, HIITSection, HIITExercise, MuscleGroup, WorkoutSettings, WarmupSection, WarmupExercise, CorrectivesSection, CorrectiveExercise, YogaSection, YogaExercise } from '../types';
+import { strengthExercises, hypertrophyExercises, hiitExercises, progressionRules, warmupExercises, correctivesExercises, yogaExercises } from '../data/exercises';
 
 const shuffleArray = <T>(array: T[]): T[] => {
   const shuffled = [...array];
@@ -188,12 +188,44 @@ const createWarmupSection = (): WarmupSection => {
   };
 };
 
+// Create correctives section - all 4 exercises every workout
+const createCorrectivesSection = (): CorrectivesSection => {
+  const totalDuration = correctivesExercises.reduce((sum, ex) => sum + ex.duration, 0);
+
+  return {
+    exercises: correctivesExercises.map(ex => ({
+      id: ex.id,
+      name: ex.name,
+      duration: ex.duration,
+      reps: ex.reps,
+      description: ex.description
+    })),
+    totalDuration
+  };
+};
+
+// Create yoga flow section - 2 minute cooldown routine
+const createYogaSection = (): YogaSection => {
+  const totalDuration = yogaExercises.reduce((sum, ex) => sum + ex.duration, 0);
+
+  return {
+    exercises: yogaExercises.map(ex => ({
+      id: ex.id,
+      name: ex.name,
+      duration: ex.duration,
+      description: ex.description
+    })),
+    totalDuration
+  };
+};
 
 const calculateWorkoutDuration = (
   warmup: WarmupSection,
   strengthExercises: WorkoutExercise[],
   hypertrophyExercises: WorkoutExercise[],
-  hiit: HIITSection
+  correctives: CorrectivesSection,
+  hiit: HIITSection,
+  yoga: YogaSection
 ): number => {
   const warmupTime = warmup.totalDuration;
 
@@ -209,9 +241,11 @@ const calculateWorkoutDuration = (
     return total + (timePerSet * ex.sets) + restTime;
   }, 0);
 
+  const correctivesTime = correctives.totalDuration;
   const hiitTime = hiit.totalDuration;
+  const yogaTime = yoga.totalDuration;
 
-  return Math.ceil((warmupTime + strengthTime + hypertrophyTime + hiitTime) / 60);
+  return Math.ceil((warmupTime + strengthTime + hypertrophyTime + correctivesTime + hiitTime + yogaTime) / 60);
 };
 
 const generateWorkout = (
@@ -252,10 +286,16 @@ const generateWorkout = (
     ...selectedHypertrophyExercises.map(ex => ex.muscleGroup)
   ])] as MuscleGroup[];
 
-  // Create HIIT section with 4 exercises (2+ ab exercises)
+  // Create correctives section
+  const correctivesSection = createCorrectivesSection();
+
+  // Create HIIT section with 4 exercises (mixed intensity)
   const hiitSection = createHIITSection(week, isDeload);
 
-  const totalDuration = calculateWorkoutDuration(warmupSection, selectedStrength, selectedHypertrophy, hiitSection);
+  // Create yoga cooldown section
+  const yogaSection = createYogaSection();
+
+  const totalDuration = calculateWorkoutDuration(warmupSection, selectedStrength, selectedHypertrophy, correctivesSection, hiitSection, yogaSection);
 
   return {
     id: `w${week}-d${day}`,
@@ -267,7 +307,9 @@ const generateWorkout = (
     warmupSection,
     strengthExercises: selectedStrength,
     hypertrophyExercises: selectedHypertrophy,
+    correctivesSection,
     hiitSection,
+    yogaSection,
     totalDurationMinutes: Math.max(totalDuration, settings.workoutDurationMinutes),
     isDeload,
   };
