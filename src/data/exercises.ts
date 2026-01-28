@@ -1,4 +1,4 @@
-import { Exercise } from '../types';
+import { Exercise, WarmupExercise, CorrectiveExercise, YogaExercise } from '../types';
 
 // Strength exercises - 5 sets x 5 reps, pick 2 per workout
 export const strengthExercises: Exercise[] = [
@@ -56,14 +56,6 @@ export const hiitExercises: HIITExerciseData[] = [
 ];
 
 // Warm-up exercises - dynamic movements to prepare for workout
-export interface WarmupExercise {
-  id: string;
-  name: string;
-  duration: number; // in seconds
-  description: string;
-  category: 'cardio' | 'dynamic' | 'activation';
-}
-
 export const warmupExercises: WarmupExercise[] = [
   // Light cardio (2-3 min)
   { id: 'w1', name: 'Jumping Jacks', duration: 60, description: 'Light cardio to raise heart rate', category: 'cardio' },
@@ -85,14 +77,6 @@ export const warmupExercises: WarmupExercise[] = [
 ];
 
 // Correctives exercises - mobility and stability work
-export interface CorrectiveExercise {
-  id: string;
-  name: string;
-  duration: number; // in seconds
-  reps?: string;
-  description: string;
-}
-
 export const correctivesExercises: CorrectiveExercise[] = [
   { id: 'c1', name: 'Side Leg Raises', duration: 30, reps: '10 each side', description: 'Hip abductor activation and stability' },
   { id: 'c2', name: 'Chair Pose with Arms Overhead', duration: 30, description: 'Lower body isometric hold with shoulder mobility' },
@@ -101,13 +85,6 @@ export const correctivesExercises: CorrectiveExercise[] = [
 ];
 
 // Yoga flow exercises - 2 minute cooldown routine
-export interface YogaExercise {
-  id: string;
-  name: string;
-  duration: number; // in seconds
-  description: string;
-}
-
 export const yogaExercises: YogaExercise[] = [
   { id: 'y1', name: 'Child\'s Pose', duration: 20, description: 'Rest and stretch the back, hips, and thighs' },
   { id: 'y2', name: 'Downward Dog', duration: 20, description: 'Full body stretch, hamstrings and shoulders' },

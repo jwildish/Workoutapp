@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { HIITSection } from '../types';
+import './HIITTimer.css';
 
 interface Props {
   hiitSection: HIITSection;

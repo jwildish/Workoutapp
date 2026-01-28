@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Workout, WeightEntry } from '../types';
 import { saveWeight, getSuggestedWeightForWeek } from '../utils/weightTracking';
+import './WorkoutCard.css';
 
 interface Props {
   workout: Workout;

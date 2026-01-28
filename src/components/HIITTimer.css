@@ -1,0 +1,236 @@
+/* ======================================
+   HIIT TIMER STYLES
+   ====================================== */
+
+.hiit-timer {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.hiit-timer.ready-state {
+  background: var(--surface);
+  border-radius: var(--border-radius);
+}
+
+.hiit-info {
+  margin: 30px 0;
+}
+
+.hiit-info h3 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+}
+
+.hiit-details {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.detail {
+  text-align: center;
+}
+
+.detail .value {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--secondary);
+}
+
+.detail .label {
+  color: var(--text-secondary);
+}
+
+.start-hiit-btn {
+  padding: 18px 60px;
+  border: none;
+  border-radius: var(--border-radius);
+  background: linear-gradient(135deg, var(--danger), var(--warning));
+  color: white;
+  font-size: 1.3rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.start-hiit-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 25px rgba(225, 112, 85, 0.5);
+}
+
+.hiit-header {
+  margin-bottom: 30px;
+}
+
+.round-indicator {
+  color: var(--text-secondary);
+}
+
+.timer-display {
+  padding: 60px 20px;
+  background: var(--surface);
+  border-radius: var(--border-radius);
+  margin-bottom: 30px;
+}
+
+.phase-label {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 20px;
+}
+
+.phase-label.get-ready {
+  color: var(--warning);
+}
+
+.phase-label.work {
+  color: var(--work-color);
+  animation: pulse 1s infinite;
+}
+
+.phase-label.rest {
+  color: var(--rest-color);
+}
+
+.phase-label.complete {
+  color: var(--success);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.countdown,
+.time-remaining {
+  font-size: 8rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.hiit-timer.work .time-remaining {
+  color: var(--work-color);
+}
+
+.hiit-timer.rest .time-remaining {
+  color: var(--rest-color);
+}
+
+.instruction {
+  margin-top: 15px;
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+}
+
+.completion-message {
+  font-size: 2rem;
+  margin-top: 20px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 10px;
+  background: var(--surface);
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  transition: width 0.5s ease;
+}
+
+.rounds-display {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.round-dot {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--surface-light);
+}
+
+.round-dot.completed {
+  background: var(--success);
+}
+
+.round-dot.current {
+  background: var(--primary);
+  box-shadow: 0 0 10px rgba(108, 92, 231, 0.5);
+}
+
+/* HIIT Exercise Indicators */
+.hiit-exercise-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin: 15px 0;
+}
+
+.hiit-exercise-preview {
+  background: var(--surface-light);
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+}
+
+.hiit-exercise-preview.core-exercise {
+  background: rgba(253, 121, 168, 0.2);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+}
+
+.current-exercise-name {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--secondary);
+}
+
+.exercise-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 15px 0;
+}
+
+.exercise-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--surface-light);
+  transition: var(--transition);
+}
+
+.exercise-dot.completed {
+  background: var(--success);
+}
+
+.exercise-dot.current {
+  background: var(--primary);
+  box-shadow: 0 0 10px rgba(108, 92, 231, 0.5);
+  transform: scale(1.3);
+}
+
+.exercise-dot.core {
+  border: 2px solid var(--accent);
+}
+
+.exercise-dot.core.completed {
+  background: var(--accent);
+}
+
+.exercise-dot.core.current {
+  background: var(--accent);
+  box-shadow: 0 0 10px rgba(253, 121, 168, 0.5);
+}

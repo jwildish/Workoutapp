@@ -1,0 +1,297 @@
+/* ======================================
+   WORKOUT CARD STYLES
+   ====================================== */
+
+.workout-card {
+  background: var(--surface);
+  padding: 25px;
+  border-radius: var(--border-radius);
+}
+
+.workout-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.workout-header h4 {
+  font-size: 1.3rem;
+}
+
+.workout-duration {
+  background: var(--primary);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+}
+
+.workout-targets {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.muscle-tag {
+  background: rgba(0, 206, 201, 0.2);
+  color: var(--secondary);
+  padding: 5px 12px;
+  border-radius: 15px;
+  font-size: 0.85rem;
+  text-transform: capitalize;
+}
+
+.workout-sections {
+  margin-bottom: 25px;
+}
+
+.section {
+  padding: 15px;
+  border-radius: var(--border-radius);
+  margin-bottom: 15px;
+}
+
+.strength-section {
+  background: rgba(253, 121, 168, 0.1);
+  border-left: 4px solid var(--accent);
+}
+
+.hypertrophy-section {
+  background: rgba(108, 92, 231, 0.1);
+  border-left: 4px solid var(--primary);
+}
+
+.hiit-section {
+  background: rgba(225, 112, 85, 0.1);
+  border-left: 4px solid var(--danger);
+}
+
+.warmup-section {
+  background: rgba(0, 206, 201, 0.1);
+  border-left: 4px solid var(--secondary);
+}
+
+.correctives-section {
+  background: rgba(253, 203, 110, 0.1);
+  border-left: 4px solid var(--warning);
+}
+
+.yoga-section {
+  background: rgba(108, 92, 231, 0.1);
+  border-left: 4px solid var(--primary);
+}
+
+.section h5 {
+  margin-bottom: 12px;
+  font-size: 1rem;
+}
+
+.section ul {
+  list-style: none;
+}
+
+.section li {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.section li:last-child {
+  border-bottom: none;
+}
+
+.exercise-name {
+  font-weight: 500;
+}
+
+.exercise-details {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.start-workout-btn {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: var(--border-radius);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.start-workout-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(108, 92, 231, 0.4);
+}
+
+/* Weight Input */
+.exercise-info {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+
+.weight-input-group {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.weight-input {
+  width: 70px;
+  padding: 8px 10px;
+  border: 1px solid var(--surface-light);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.weight-input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.weight-input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.6;
+}
+
+.weight-unit {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+/* Deload Styling */
+.workout-card.deload {
+  border: 2px solid var(--success);
+}
+
+.deload-badge {
+  background: var(--success);
+  color: var(--background);
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-left: 10px;
+  text-transform: uppercase;
+}
+
+/* Warmup tags */
+.warmup-exercises {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.warmup-tag {
+  background: var(--surface);
+  padding: 6px 12px;
+  border-radius: 15px;
+  font-size: 0.85rem;
+}
+
+.warmup-tag.cardio {
+  background: rgba(225, 112, 85, 0.2);
+  color: var(--danger);
+  border: 1px solid var(--danger);
+}
+
+.warmup-tag.dynamic {
+  background: rgba(108, 92, 231, 0.2);
+  color: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.warmup-tag.activation {
+  background: rgba(0, 206, 201, 0.2);
+  color: var(--secondary);
+  border: 1px solid var(--secondary);
+}
+
+/* Correctives tags */
+.correctives-exercises {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.correctives-tag {
+  background: rgba(253, 203, 110, 0.2);
+  color: var(--warning);
+  border: 1px solid var(--warning);
+  padding: 6px 12px;
+  border-radius: 15px;
+  font-size: 0.85rem;
+}
+
+/* Yoga tags */
+.yoga-exercises {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.yoga-tag {
+  background: rgba(108, 92, 231, 0.2);
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  padding: 6px 12px;
+  border-radius: 15px;
+  font-size: 0.85rem;
+}
+
+/* HIIT section in card */
+.hiit-format {
+  background: var(--surface);
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.hiit-exercises {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.hiit-exercise-tag {
+  background: var(--surface);
+  padding: 6px 12px;
+  border-radius: 15px;
+  font-size: 0.85rem;
+}
+
+.hiit-exercise-tag.core-exercise {
+  background: rgba(253, 121, 168, 0.2);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .exercise-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .weight-input-group {
+    width: 100%;
+  }
+
+  .weight-input {
+    flex: 1;
+  }
+}

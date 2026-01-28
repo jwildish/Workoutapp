@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import './Login.css';
 
 export const Login: React.FC = () => {
   const { signInWithGoogle, signInAsGuest } = useAuth();
