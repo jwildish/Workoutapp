@@ -25,17 +25,9 @@ export const Login: React.FC = () => {
     }
   };
 
-  const handleGuestSignIn = async () => {
-    try {
-      setError(null);
-      setLoading(true);
-      await signInAsGuest();
-    } catch (err: any) {
-      console.error('Guest sign in error:', err);
-      setError('Failed to sign in as guest. Please try again.');
-    } finally {
-      setLoading(false);
-    }
+  const handleGuestSignIn = () => {
+    setError(null);
+    signInAsGuest();
   };
 
   return (

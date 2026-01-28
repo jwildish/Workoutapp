@@ -18,6 +18,9 @@ import './App.css';
 
 type View = 'planner' | 'workout';
 
+const GUEST_PLAN_KEY = 'hypertrophy_guest_plan';
+const GUEST_HISTORY_KEY = 'hypertrophy_guest_history';
+
 function AppContent() {
   const { user, loading: authLoading, isGuest, signOut } = useAuth();
   const [settings, setSettings] = useState<WorkoutSettings>(defaultSettings);
@@ -35,43 +38,74 @@ function AppContent() {
   // Load user data on auth state change
   useEffect(() => {
     const loadUserData = async () => {
-      if (user) {
-        setDataLoading(true);
-        try {
-          const data = await getOrCreateUser(
-            user.uid,
-            user.email || '',
-            user.displayName || 'User',
-            user.photoURL || undefined
-          );
-          setUserData(data);
+      if (!user) return;
 
-          // If user has a saved plan, use it
-          if (data.currentPlan && data.currentPlan.length > 0) {
-            setWeekPlans(data.currentPlan);
-            if (data.planSettings) {
-              setSettings(data.planSettings);
-            }
+      setDataLoading(true);
+
+      if (isGuest) {
+        // Guest: load from localStorage
+        try {
+          const savedPlan = localStorage.getItem(GUEST_PLAN_KEY);
+          if (savedPlan) {
+            const parsed = JSON.parse(savedPlan);
+            setWeekPlans(parsed.plan);
+            if (parsed.settings) setSettings(parsed.settings);
           } else {
-            // Generate new plan for new users
             const plan = generate8WeekPlan(settings);
             setWeekPlans(plan);
-            // Save the generated plan
-            await saveWorkoutPlan(user.uid, plan, settings);
+            localStorage.setItem(GUEST_PLAN_KEY, JSON.stringify({ plan, settings }));
           }
-        } catch (error) {
-          console.error('Error loading user data:', error);
-          // Fallback to local generation
+
+          const savedHistory = localStorage.getItem(GUEST_HISTORY_KEY);
+          if (savedHistory) {
+            setUserData({
+              odId: user.uid,
+              email: '',
+              displayName: 'Guest',
+              createdAt: new Date().toISOString(),
+              workoutHistory: JSON.parse(savedHistory),
+              weightHistory: {}
+            });
+          }
+        } catch {
           const plan = generate8WeekPlan(settings);
           setWeekPlans(plan);
-        } finally {
-          setDataLoading(false);
         }
+        setDataLoading(false);
+        return;
+      }
+
+      // Authenticated user: load from Firestore
+      try {
+        const data = await getOrCreateUser(
+          user.uid,
+          user.email || '',
+          user.displayName || 'User',
+          user.photoURL || undefined
+        );
+        setUserData(data);
+
+        if (data.currentPlan && data.currentPlan.length > 0) {
+          setWeekPlans(data.currentPlan);
+          if (data.planSettings) {
+            setSettings(data.planSettings);
+          }
+        } else {
+          const plan = generate8WeekPlan(settings);
+          setWeekPlans(plan);
+          await saveWorkoutPlan(user.uid, plan, settings);
+        }
+      } catch (error) {
+        console.error('Error loading user data:', error);
+        const plan = generate8WeekPlan(settings);
+        setWeekPlans(plan);
+      } finally {
+        setDataLoading(false);
       }
     };
 
     loadUserData();
-  }, [user]);
+  }, [user, isGuest]);
 
   const handleStartWorkout = (workout: Workout) => {
     setActiveWorkout(workout);
@@ -79,16 +113,31 @@ function AppContent() {
   };
 
   const handleWorkoutComplete = async (completedWorkout: CompletedWorkout) => {
-    if (user) {
-      try {
-        // Add user ID to completed workout
-        const workoutWithUserId = {
-          ...completedWorkout,
-          odId: user.uid
-        };
-        await saveCompletedWorkout(user.uid, workoutWithUserId);
+    if (!user) return;
 
-        // Refresh user data
+    const workoutWithUserId = {
+      ...completedWorkout,
+      odId: user.uid
+    };
+
+    if (isGuest) {
+      // Guest: save to localStorage
+      try {
+        const savedHistory = localStorage.getItem(GUEST_HISTORY_KEY);
+        const history: CompletedWorkout[] = savedHistory ? JSON.parse(savedHistory) : [];
+        history.push(workoutWithUserId);
+        localStorage.setItem(GUEST_HISTORY_KEY, JSON.stringify(history));
+        setUserData(prev => prev ? {
+          ...prev,
+          workoutHistory: history
+        } : null);
+      } catch (error) {
+        console.error('Error saving guest workout:', error);
+      }
+    } else {
+      // Authenticated: save to Firestore
+      try {
+        await saveCompletedWorkout(user.uid, workoutWithUserId);
         const updatedData = await getUserData(user.uid);
         if (updatedData) {
           setUserData(updatedData);
@@ -104,34 +153,30 @@ function AppContent() {
     setView('planner');
   };
 
-  const handleRegeneratePlan = async () => {
-    const plan = generate8WeekPlan(settings);
-    setWeekPlans(plan);
-    setSelectedDay(null);
-
-    // Save to Firestore if logged in
-    if (user) {
+  const savePlan = async (plan: WeekPlan[], planSettings: WorkoutSettings) => {
+    if (isGuest) {
+      localStorage.setItem(GUEST_PLAN_KEY, JSON.stringify({ plan, settings: planSettings }));
+    } else if (user) {
       try {
-        await saveWorkoutPlan(user.uid, plan, settings);
+        await saveWorkoutPlan(user.uid, plan, planSettings);
       } catch (error) {
         console.error('Error saving plan:', error);
       }
     }
   };
 
+  const handleRegeneratePlan = async () => {
+    const plan = generate8WeekPlan(settings);
+    setWeekPlans(plan);
+    setSelectedDay(null);
+    await savePlan(plan, settings);
+  };
+
   const handleSettingsChange = async (newSettings: WorkoutSettings) => {
     setSettings(newSettings);
     const plan = generate8WeekPlan(newSettings);
     setWeekPlans(plan);
-
-    // Save to Firestore if logged in
-    if (user) {
-      try {
-        await saveWorkoutPlan(user.uid, plan, newSettings);
-      } catch (error) {
-        console.error('Error saving settings:', error);
-      }
-    }
+    await savePlan(plan, newSettings);
   };
 
   const handleCopyToClipboard = async () => {
