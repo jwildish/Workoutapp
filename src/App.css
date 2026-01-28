@@ -1303,6 +1303,50 @@ body {
   flex-shrink: 0;
 }
 
+.login-divider {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.login-divider::before,
+.login-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--surface-light);
+}
+
+.login-divider span {
+  padding: 0 15px;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.guest-sign-in-btn {
+  width: 100%;
+  padding: 14px 24px;
+  border: 2px solid var(--surface-light);
+  border-radius: var(--border-radius);
+  background: transparent;
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.guest-sign-in-btn:hover:not(:disabled) {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.guest-sign-in-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
 .login-note {
   margin-top: 20px;
   font-size: 0.8rem;
@@ -1338,6 +1382,28 @@ body {
 .user-name {
   font-weight: 500;
   color: var(--text);
+}
+
+.guest-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text-secondary);
+  background: var(--surface-light);
+}
+
+.guest-badge {
+  font-size: 0.7rem;
+  color: var(--warning);
+  background: rgba(253, 203, 110, 0.15);
+  padding: 2px 8px;
+  border-radius: 8px;
 }
 
 .sign-out-btn {

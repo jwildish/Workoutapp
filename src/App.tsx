@@ -19,7 +19,7 @@ import './App.css';
 type View = 'planner' | 'workout';
 
 function AppContent() {
-  const { user, loading: authLoading, signOut } = useAuth();
+  const { user, loading: authLoading, isGuest, signOut } = useAuth();
   const [settings, setSettings] = useState<WorkoutSettings>(defaultSettings);
   const [weekPlans, setWeekPlans] = useState<WeekPlan[]>([]);
   const [selectedWeek, setSelectedWeek] = useState(1);
@@ -193,13 +193,15 @@ function AppContent() {
       <header className="app-header">
         <div className="header-top">
           <div className="user-info">
-            {user.photoURL && (
+            {user.photoURL && !isGuest && (
               <img src={user.photoURL} alt="Profile" className="user-avatar" />
             )}
-            <span className="user-name">{user.displayName}</span>
+            {isGuest && <span className="guest-avatar">G</span>}
+            <span className="user-name">{isGuest ? 'Guest' : user.displayName}</span>
+            {isGuest && <span className="guest-badge">Data saved locally only</span>}
           </div>
           <button className="sign-out-btn" onClick={handleSignOut}>
-            Sign Out
+            {isGuest ? 'Exit' : 'Sign Out'}
           </button>
         </div>
         <h1>Hypertrophy Trainer</h1>

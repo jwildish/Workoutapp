@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 
 export const Login: React.FC = () => {
-  const { signInWithGoogle } = useAuth();
+  const { signInWithGoogle, signInAsGuest } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -20,6 +20,19 @@ export const Login: React.FC = () => {
       } else {
         setError('Failed to sign in. Please try again.');
       }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGuestSignIn = async () => {
+    try {
+      setError(null);
+      setLoading(true);
+      await signInAsGuest();
+    } catch (err: any) {
+      console.error('Guest sign in error:', err);
+      setError('Failed to sign in as guest. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -90,8 +103,20 @@ export const Login: React.FC = () => {
           )}
         </button>
 
+        <div className="login-divider">
+          <span>or</span>
+        </div>
+
+        <button
+          className="guest-sign-in-btn"
+          onClick={handleGuestSignIn}
+          disabled={loading}
+        >
+          Continue as Guest
+        </button>
+
         <p className="login-note">
-          Your workout data is securely stored and synced across all your devices.
+          Sign in with Google to sync data across devices. Guest data is saved to your device only.
         </p>
       </div>
     </div>
