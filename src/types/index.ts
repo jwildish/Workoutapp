@@ -34,7 +34,8 @@ export interface WorkoutExercise extends Exercise {
 export interface HIITExercise {
   name: string;
   muscleGroup: MuscleGroup;
-  duration: number; // seconds
+  duration: number; // work seconds
+  restSeconds: number; // rest seconds after this exercise
 }
 
 export interface HIITSection {

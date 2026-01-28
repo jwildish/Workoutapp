@@ -1,5 +1,5 @@
 import { Exercise, Workout, WorkoutExercise, WeekPlan, HIITSection, HIITExercise, MuscleGroup, WorkoutSettings, WarmupSection, WarmupExercise } from '../types';
-import { strengthExercises, hypertrophyExercises, hiitExercises, workoutSplits, progressionRules, warmupExercises } from '../data/exercises';
+import { strengthExercises, hypertrophyExercises, hiitExercises, progressionRules, warmupExercises } from '../data/exercises';
 
 const shuffleArray = <T>(array: T[]): T[] => {
   const shuffled = [...array];
@@ -10,11 +10,7 @@ const shuffleArray = <T>(array: T[]): T[] => {
   return shuffled;
 };
 
-const getExercisesByMuscleGroup = (exercises: Exercise[], muscleGroups: readonly string[]): Exercise[] => {
-  return exercises.filter(ex => muscleGroups.includes(ex.muscleGroup));
-};
-
-// Based on periodization research (Stone et al., Bompa & Haff)
+// Strength: 5 sets x 5 reps, Hypertrophy: 4 sets x 10 reps
 // Week 4 is deload week with reduced volume and intensity
 const getProgressiveOverload = (week: number, isDeload: boolean): {
   strengthSets: number;
@@ -36,49 +32,15 @@ const getProgressiveOverload = (week: number, isDeload: boolean): {
     };
   }
 
-  // Progressive overload through 8 weeks (excluding deload)
-  // Based on linear periodization principles
-  if (week <= 2) {
-    // Accumulation phase - moderate intensity, building volume
-    return {
-      strengthSets: 4,
-      strengthReps: '6',
-      hypertrophySets: 3,
-      hypertrophyReps: '10-12',
-      intensityMultiplier: 1.0,
-      volumeMultiplier: 1.0,
-    };
-  } else if (week <= 4) {
-    // Transmutation phase - increasing intensity
-    return {
-      strengthSets: 4,
-      strengthReps: '5',
-      hypertrophySets: 3,
-      hypertrophyReps: '8-10',
-      intensityMultiplier: 1.025, // 2.5% increase
-      volumeMultiplier: 1.0,
-    };
-  } else if (week <= 6) {
-    // Intensification phase - peak intensity
-    return {
-      strengthSets: 5,
-      strengthReps: '4-5',
-      hypertrophySets: 4,
-      hypertrophyReps: '8-12',
-      intensityMultiplier: 1.05, // 5% increase from start
-      volumeMultiplier: 1.1,
-    };
-  } else {
-    // Realization phase - maintain intensity, optimize performance
-    return {
-      strengthSets: 4,
-      strengthReps: '3-5',
-      hypertrophySets: 3,
-      hypertrophyReps: '6-10',
-      intensityMultiplier: 1.075, // 7.5% increase from start
-      volumeMultiplier: 0.9,
-    };
-  }
+  // Standard programming: 5x5 strength, 4x10 hypertrophy
+  return {
+    strengthSets: 5,
+    strengthReps: '5',
+    hypertrophySets: 4,
+    hypertrophyReps: '10',
+    intensityMultiplier: 1.0 + (week * 0.01), // Small progressive increase
+    volumeMultiplier: 1.0,
+  };
 };
 
 const getWeekFocus = (week: number, isDeload: boolean): string => {
@@ -164,37 +126,38 @@ const createHypertrophyExercise = (exercise: Exercise, week: number, isDeload: b
   };
 };
 
-// Create HIIT section with 4+ exercises, at least 2 ab exercises
+// Create HIIT section with mixed intensity exercises
+// High intensity: 20s work / 10s rest, Low intensity: 40s work / 20s rest
 const createHIITSection = (week: number, isDeload: boolean): HIITSection => {
-  const coreExercises = hiitExercises.filter(ex => ex.muscleGroup === 'core');
-  const otherExercises = hiitExercises.filter(ex => ex.muscleGroup !== 'core');
+  const highIntensity = hiitExercises.filter(ex => ex.intensity === 'high');
+  const lowIntensity = hiitExercises.filter(ex => ex.intensity === 'low');
 
-  // Select at least 2 core/ab exercises
-  const selectedCore = shuffleArray(coreExercises).slice(0, 2);
-  // Select 2 other exercises (cardio/full body)
-  const selectedOther = shuffleArray(otherExercises).slice(0, 2);
+  // Select 2 high intensity and 2 low intensity exercises
+  const selectedHigh = shuffleArray(highIntensity).slice(0, 2);
+  const selectedLow = shuffleArray(lowIntensity).slice(0, 2);
 
-  const allSelected = shuffleArray([...selectedCore, ...selectedOther]);
+  // Alternate high and low intensity
+  const allSelected = [selectedHigh[0], selectedLow[0], selectedHigh[1], selectedLow[1]];
 
-  // Tabata-style intervals: 20 seconds work, 10 seconds rest
-  const workSeconds = 20;
-  const restSeconds = 10;
-
-  // Calculate rounds to fill ~8 minutes
-  // Each exercise cycles through, then repeat
-  const cycleTime = (workSeconds + restSeconds) * allSelected.length;
-  const rounds = Math.ceil(480 / cycleTime); // 480 seconds = 8 minutes
+  // Calculate total time for one cycle
+  // High intensity: 20s work + 10s rest = 30s, Low intensity: 40s work + 20s rest = 60s
+  // One cycle = 2 high (60s) + 2 low (120s) = 180s = 3 min
+  // For ~8 minutes, we need about 2-3 rounds
+  const rounds = 3;
 
   const hiitExerciseList: HIITExercise[] = allSelected.map(ex => ({
     name: ex.name,
     muscleGroup: ex.muscleGroup,
-    duration: workSeconds,
+    duration: ex.intensity === 'high' ? 20 : 40,
+    restSeconds: ex.intensity === 'high' ? 10 : 20,
   }));
 
+  // Use average values for the section metadata
+  // Actual timing varies per exercise based on intensity
   return {
     exercises: hiitExerciseList,
-    workSeconds,
-    restSeconds,
+    workSeconds: 30, // Average (will be overridden per exercise)
+    restSeconds: 15, // Average (will be overridden per exercise)
     rounds,
     totalDuration: 480,
   };
@@ -225,12 +188,6 @@ const createWarmupSection = (): WarmupSection => {
   };
 };
 
-type SplitType = 'pushA' | 'pullA' | 'pushB' | 'pullB';
-
-const getSplitForDay = (day: number): SplitType => {
-  const splits: SplitType[] = ['pushA', 'pullA', 'pushB', 'pullB'];
-  return splits[(day - 1) % 4];
-};
 
 const calculateWorkoutDuration = (
   warmup: WarmupSection,
@@ -265,21 +222,13 @@ const generateWorkout = (
   usedHypertrophyIds: Set<string>
 ): Workout => {
   const isDeload = week === 4; // Week 4 is deload week
-  const splitType = getSplitForDay(day);
-  const split = workoutSplits[splitType];
 
-  const targetMuscles = [...split.strength, ...split.hypertrophy].filter(
-    (v, i, a) => a.indexOf(v) === i
-  ) as MuscleGroup[];
-
-  // Get exercises for this split, excluding already used ones this week
+  // Get available exercises from the full pool, excluding already used ones this week
   const availableStrength = shuffleArray(
-    getExercisesByMuscleGroup(strengthExercises, split.strength)
-      .filter(ex => !usedStrengthIds.has(ex.id))
+    strengthExercises.filter(ex => !usedStrengthIds.has(ex.id))
   );
   const availableHypertrophy = shuffleArray(
-    getExercisesByMuscleGroup(hypertrophyExercises, split.hypertrophy)
-      .filter(ex => !usedHypertrophyIds.has(ex.id))
+    hypertrophyExercises.filter(ex => !usedHypertrophyIds.has(ex.id))
   );
 
   // Create warm-up section
@@ -297,6 +246,12 @@ const generateWorkout = (
   const selectedHypertrophy = selectedHypertrophyExercises
     .map(ex => createHypertrophyExercise(ex, week, isDeload));
 
+  // Get target muscles from selected exercises
+  const targetMuscles = [...new Set([
+    ...selectedStrengthExercises.map(ex => ex.muscleGroup),
+    ...selectedHypertrophyExercises.map(ex => ex.muscleGroup)
+  ])] as MuscleGroup[];
+
   // Create HIIT section with 4 exercises (2+ ab exercises)
   const hiitSection = createHIITSection(week, isDeload);
 
@@ -306,8 +261,8 @@ const generateWorkout = (
     id: `w${week}-d${day}`,
     week,
     day,
-    name: `Week ${week} - ${split.name}`,
-    splitType,
+    name: `Week ${week} - Day ${day}`,
+    splitType: `day${day}`,
     targetMuscles,
     warmupSection,
     strengthExercises: selectedStrength,

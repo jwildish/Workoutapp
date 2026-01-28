@@ -30,11 +30,12 @@ export const HIITTimer: React.FC<Props> = ({ hiitSection, onComplete }) => {
   const moveToNextPhase = useCallback(() => {
     if (phase === 'ready') {
       setPhase('work');
-      setTimeRemaining(hiitSection.workSeconds);
+      // Use per-exercise work duration
+      setTimeRemaining(exercises[0].duration);
     } else if (phase === 'work') {
-      // Move to rest after work
+      // Move to rest after work - use per-exercise rest duration
       setPhase('rest');
-      setTimeRemaining(hiitSection.restSeconds);
+      setTimeRemaining(currentExercise.restSeconds);
     } else if (phase === 'rest') {
       // Move to next exercise or next round
       const nextExerciseIndex = currentExerciseIndex + 1;
@@ -51,16 +52,18 @@ export const HIITTimer: React.FC<Props> = ({ hiitSection, onComplete }) => {
           setCurrentRound(prev => prev + 1);
           setCurrentExerciseIndex(0);
           setPhase('work');
-          setTimeRemaining(hiitSection.workSeconds);
+          // Use first exercise's work duration for new round
+          setTimeRemaining(exercises[0].duration);
         }
       } else {
         // Move to next exercise
         setCurrentExerciseIndex(nextExerciseIndex);
         setPhase('work');
-        setTimeRemaining(hiitSection.workSeconds);
+        // Use next exercise's work duration
+        setTimeRemaining(exercises[nextExerciseIndex].duration);
       }
     }
-  }, [phase, currentRound, currentExerciseIndex, totalExercises, hiitSection, onComplete]);
+  }, [phase, currentRound, currentExerciseIndex, totalExercises, exercises, currentExercise, hiitSection.rounds, onComplete]);
 
   useEffect(() => {
     if (!isRunning || phase === 'complete') return;
@@ -87,10 +90,12 @@ export const HIITTimer: React.FC<Props> = ({ hiitSection, onComplete }) => {
   const getProgressPercentage = (): number => {
     const totalCycles = hiitSection.rounds * totalExercises;
     const completedCycles = (currentRound - 1) * totalExercises + currentExerciseIndex;
+    const currentWorkTime = currentExercise?.duration || 30;
+    const currentRestTime = currentExercise?.restSeconds || 15;
     const cycleProgress = phase === 'work'
-      ? (hiitSection.workSeconds - timeRemaining) / (hiitSection.workSeconds + hiitSection.restSeconds)
+      ? (currentWorkTime - timeRemaining) / (currentWorkTime + currentRestTime)
       : phase === 'rest'
-        ? (hiitSection.workSeconds + hiitSection.restSeconds - timeRemaining) / (hiitSection.workSeconds + hiitSection.restSeconds)
+        ? (currentWorkTime + currentRestTime - timeRemaining) / (currentWorkTime + currentRestTime)
         : 0;
     return ((completedCycles + cycleProgress) / totalCycles) * 100;
   };
@@ -118,11 +123,11 @@ export const HIITTimer: React.FC<Props> = ({ hiitSection, onComplete }) => {
               <span className="label">Rounds</span>
             </div>
             <div className="detail">
-              <span className="value">{hiitSection.workSeconds}s</span>
+              <span className="value">20-40s</span>
               <span className="label">Work</span>
             </div>
             <div className="detail">
-              <span className="value">{hiitSection.restSeconds}s</span>
+              <span className="value">10-20s</span>
               <span className="label">Rest</span>
             </div>
             <div className="detail">
