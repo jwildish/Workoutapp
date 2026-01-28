@@ -24,13 +24,14 @@ interface ExerciseData {
 }
 
 export const ActiveWorkout: React.FC<Props> = ({ workout, onComplete, onExit }) => {
-  const [phase, setPhase] = useState<WorkoutPhase>('strength');
+  const [phase, setPhase] = useState<WorkoutPhase>('warmup');
   const [exerciseData, setExerciseData] = useState<Map<string, ExerciseData>>(new Map());
   const [showRestTimer, setShowRestTimer] = useState(false);
   const [restDuration, setRestDuration] = useState(0);
   const [currentRestExercise, setCurrentRestExercise] = useState('');
   const [startTime] = useState<Date>(new Date());
   const [expandedExercise, setExpandedExercise] = useState<string | null>(null);
+  const [warmupCompleted, setWarmupCompleted] = useState<Set<string>>(new Set());
 
   // Initialize exercise data with default sets
   useEffect(() => {
@@ -172,8 +173,34 @@ export const ActiveWorkout: React.FC<Props> = ({ workout, onComplete, onExit }) 
     onComplete(completedWorkout);
   };
 
+  const isWarmupComplete = warmupCompleted.size === workout.warmupSection.exercises.length;
+
+  const handleWarmupExerciseComplete = (exerciseId: string) => {
+    setWarmupCompleted(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(exerciseId)) {
+        newSet.delete(exerciseId);
+      } else {
+        newSet.add(exerciseId);
+      }
+      return newSet;
+    });
+  };
+
+  const handleSkipWarmup = () => {
+    setPhase('strength');
+    if (workout.strengthExercises.length > 0) {
+      setExpandedExercise(workout.strengthExercises[0].id);
+    }
+  };
+
   const renderPhaseIndicator = () => (
     <div className="phase-indicator">
+      <div className={`phase-dot ${phase === 'warmup' ? 'active' : ''} ${['strength', 'hypertrophy', 'hiit', 'complete'].includes(phase) ? 'completed' : ''}`}>
+        <span>0</span>
+        <label>Warm-up</label>
+      </div>
+      <div className="phase-line" />
       <div className={`phase-dot ${phase === 'strength' ? 'active' : ''} ${isPhaseComplete('strength') || ['hypertrophy', 'hiit', 'complete'].includes(phase) ? 'completed' : ''}`}>
         <span>1</span>
         <label>Strength</label>
@@ -317,6 +344,80 @@ export const ActiveWorkout: React.FC<Props> = ({ workout, onComplete, onExit }) 
           onComplete={handleRestComplete}
           exerciseName={currentRestExercise}
         />
+      </div>
+    );
+  }
+
+  if (phase === 'warmup') {
+    return (
+      <div className="active-workout warmup-phase">
+        <div className="workout-header-bar">
+          <button className="back-btn" onClick={onExit}>← Exit</button>
+          <h2>{workout.name}</h2>
+        </div>
+
+        {renderPhaseIndicator()}
+
+        <div className="workout-content">
+          <div className="phase-section warmup-section-active">
+            <div className="phase-section-header">
+              <h3>Warm-Up</h3>
+              <span className="phase-subtitle">~{Math.round(workout.warmupSection.totalDuration / 60)} min</span>
+            </div>
+
+            <div className="warmup-exercise-list">
+              {workout.warmupSection.exercises.map((exercise) => {
+                const isCompleted = warmupCompleted.has(exercise.id);
+                return (
+                  <div
+                    key={exercise.id}
+                    className={`warmup-exercise-item ${isCompleted ? 'completed' : ''}`}
+                    onClick={() => handleWarmupExerciseComplete(exercise.id)}
+                  >
+                    <div className="warmup-exercise-check">
+                      <span className={`warmup-check-icon ${isCompleted ? 'checked' : ''}`}>
+                        {isCompleted ? '✓' : ''}
+                      </span>
+                    </div>
+                    <div className="warmup-exercise-info">
+                      <h4>{exercise.name}</h4>
+                      <p>{exercise.description}</p>
+                      <div className="warmup-exercise-meta">
+                        <span className={`warmup-category ${exercise.category}`}>{exercise.category}</span>
+                        <span className="warmup-duration">{exercise.duration}s</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="warmup-progress">
+              <div className="warmup-progress-bar">
+                <div
+                  className="warmup-progress-fill"
+                  style={{ width: `${(warmupCompleted.size / workout.warmupSection.exercises.length) * 100}%` }}
+                />
+              </div>
+              <span className="warmup-progress-text">
+                {warmupCompleted.size} / {workout.warmupSection.exercises.length} completed
+              </span>
+            </div>
+          </div>
+
+          <div className="workout-actions">
+            <button className="secondary-btn" onClick={handleSkipWarmup}>
+              Skip Warm-Up
+            </button>
+            <button
+              className="primary-btn"
+              onClick={handleSkipWarmup}
+              disabled={!isWarmupComplete}
+            >
+              Continue to Strength →
+            </button>
+          </div>
+        </div>
       </div>
     );
   }

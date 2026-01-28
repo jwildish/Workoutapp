@@ -1,5 +1,5 @@
-import { Exercise, Workout, WorkoutExercise, WeekPlan, HIITSection, HIITExercise, MuscleGroup, WorkoutSettings } from '../types';
-import { strengthExercises, hypertrophyExercises, hiitExercises, workoutSplits, progressionRules } from '../data/exercises';
+import { Exercise, Workout, WorkoutExercise, WeekPlan, HIITSection, HIITExercise, MuscleGroup, WorkoutSettings, WarmupSection, WarmupExercise } from '../types';
+import { strengthExercises, hypertrophyExercises, hiitExercises, workoutSplits, progressionRules, warmupExercises } from '../data/exercises';
 
 const shuffleArray = <T>(array: T[]): T[] => {
   const shuffled = [...array];
@@ -200,6 +200,31 @@ const createHIITSection = (week: number, isDeload: boolean): HIITSection => {
   };
 };
 
+// Create warm-up section (~5 min)
+const createWarmupSection = (): WarmupSection => {
+  const cardioExercises = warmupExercises.filter(ex => ex.category === 'cardio');
+  const dynamicExercises = warmupExercises.filter(ex => ex.category === 'dynamic');
+  const activationExercises = warmupExercises.filter(ex => ex.category === 'activation');
+
+  // Select 2 cardio, 3 dynamic, 2 activation exercises
+  const selectedCardio = shuffleArray(cardioExercises).slice(0, 2);
+  const selectedDynamic = shuffleArray(dynamicExercises).slice(0, 3);
+  const selectedActivation = shuffleArray(activationExercises).slice(0, 2);
+
+  const allSelected: WarmupExercise[] = [
+    ...selectedCardio,
+    ...selectedDynamic,
+    ...selectedActivation
+  ];
+
+  const totalDuration = allSelected.reduce((sum, ex) => sum + ex.duration, 0);
+
+  return {
+    exercises: allSelected,
+    totalDuration
+  };
+};
+
 type SplitType = 'pushA' | 'pullA' | 'pushB' | 'pullB';
 
 const getSplitForDay = (day: number): SplitType => {
@@ -208,10 +233,13 @@ const getSplitForDay = (day: number): SplitType => {
 };
 
 const calculateWorkoutDuration = (
+  warmup: WarmupSection,
   strengthExercises: WorkoutExercise[],
   hypertrophyExercises: WorkoutExercise[],
   hiit: HIITSection
 ): number => {
+  const warmupTime = warmup.totalDuration;
+
   const strengthTime = strengthExercises.reduce((total, ex) => {
     const timePerSet = 45;
     const restTime = ex.restSeconds * (ex.sets - 1);
@@ -226,7 +254,7 @@ const calculateWorkoutDuration = (
 
   const hiitTime = hiit.totalDuration;
 
-  return Math.ceil((strengthTime + hypertrophyTime + hiitTime) / 60);
+  return Math.ceil((warmupTime + strengthTime + hypertrophyTime + hiitTime) / 60);
 };
 
 const generateWorkout = (
@@ -254,6 +282,9 @@ const generateWorkout = (
       .filter(ex => !usedHypertrophyIds.has(ex.id))
   );
 
+  // Create warm-up section
+  const warmupSection = createWarmupSection();
+
   // Select 2 strength exercises (no repeats within week)
   const selectedStrengthExercises = availableStrength.slice(0, 2);
   selectedStrengthExercises.forEach(ex => usedStrengthIds.add(ex.id));
@@ -269,7 +300,7 @@ const generateWorkout = (
   // Create HIIT section with 4 exercises (2+ ab exercises)
   const hiitSection = createHIITSection(week, isDeload);
 
-  const totalDuration = calculateWorkoutDuration(selectedStrength, selectedHypertrophy, hiitSection);
+  const totalDuration = calculateWorkoutDuration(warmupSection, selectedStrength, selectedHypertrophy, hiitSection);
 
   return {
     id: `w${week}-d${day}`,
@@ -278,6 +309,7 @@ const generateWorkout = (
     name: `Week ${week} - ${split.name}`,
     splitType,
     targetMuscles,
+    warmupSection,
     strengthExercises: selectedStrength,
     hypertrophyExercises: selectedHypertrophy,
     hiitSection,

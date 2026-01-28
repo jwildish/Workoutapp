@@ -45,6 +45,19 @@ export interface HIITSection {
   totalDuration: number; // 8 minutes = 480 seconds
 }
 
+export interface WarmupExercise {
+  id: string;
+  name: string;
+  duration: number; // in seconds
+  description: string;
+  category: 'cardio' | 'dynamic' | 'activation';
+}
+
+export interface WarmupSection {
+  exercises: WarmupExercise[];
+  totalDuration: number; // in seconds
+}
+
 export interface Workout {
   id: string;
   week: number;
@@ -52,6 +65,7 @@ export interface Workout {
   name: string;
   splitType: string;
   targetMuscles: MuscleGroup[];
+  warmupSection: WarmupSection;
   strengthExercises: WorkoutExercise[];
   hypertrophyExercises: WorkoutExercise[];
   hiitSection: HIITSection;

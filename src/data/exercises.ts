@@ -91,6 +91,35 @@ export const hiitExercises: Exercise[] = [
   { id: 'hiit13', name: 'Plank Jacks', muscleGroup: 'core', type: 'hiit', description: 'Core stability with cardio' },
 ];
 
+// Warm-up exercises - dynamic movements to prepare for workout
+export interface WarmupExercise {
+  id: string;
+  name: string;
+  duration: number; // in seconds
+  description: string;
+  category: 'cardio' | 'dynamic' | 'activation';
+}
+
+export const warmupExercises: WarmupExercise[] = [
+  // Light cardio (2-3 min)
+  { id: 'w1', name: 'Jumping Jacks', duration: 60, description: 'Light cardio to raise heart rate', category: 'cardio' },
+  { id: 'w2', name: 'High Knees', duration: 30, description: 'Activate hip flexors and raise heart rate', category: 'cardio' },
+  { id: 'w3', name: 'Arm Circles', duration: 30, description: 'Shoulder mobility and blood flow', category: 'cardio' },
+
+  // Dynamic stretches (2-3 min)
+  { id: 'w4', name: 'Leg Swings', duration: 30, description: 'Hip mobility - front to back', category: 'dynamic' },
+  { id: 'w5', name: 'Walking Lunges', duration: 45, description: 'Dynamic hip flexor stretch', category: 'dynamic' },
+  { id: 'w6', name: 'Arm Swings', duration: 30, description: 'Chest and shoulder opener', category: 'dynamic' },
+  { id: 'w7', name: 'Bodyweight Squats', duration: 45, description: 'Lower body activation', category: 'dynamic' },
+  { id: 'w8', name: 'Hip Circles', duration: 30, description: 'Hip joint mobility', category: 'dynamic' },
+
+  // Muscle activation (1-2 min)
+  { id: 'w9', name: 'Band Pull-Aparts', duration: 30, description: 'Rear delt and upper back activation', category: 'activation' },
+  { id: 'w10', name: 'Glute Bridges', duration: 30, description: 'Glute activation before legs', category: 'activation' },
+  { id: 'w11', name: 'Cat-Cow Stretch', duration: 30, description: 'Spine mobility', category: 'activation' },
+  { id: 'w12', name: 'Scapular Push-ups', duration: 30, description: 'Shoulder blade activation', category: 'activation' },
+];
+
 // 4-Day Push/Pull Split with reduced leg volume (legs on pull days only)
 // Upper body 2x/week, lower body 1x/week per muscle group
 export const workoutSplits = {

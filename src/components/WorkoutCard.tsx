@@ -60,6 +60,17 @@ export const WorkoutCard: React.FC<Props> = ({ workout, onStartWorkout }) => {
       </div>
 
       <div className="workout-sections">
+        <div className="section warmup-section">
+          <h5>Warm-Up ({Math.round(workout.warmupSection.totalDuration / 60)} min)</h5>
+          <div className="warmup-exercises">
+            {workout.warmupSection.exercises.map((ex) => (
+              <span key={ex.id} className={`warmup-tag ${ex.category}`}>
+                {ex.name} ({ex.duration}s)
+              </span>
+            ))}
+          </div>
+        </div>
+
         <div className="section strength-section">
           <h5>Strength (Heavy/Low Volume)</h5>
           <ul>

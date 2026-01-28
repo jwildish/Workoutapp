@@ -1797,3 +1797,220 @@ body {
     max-width: none;
   }
 }
+
+/* ======================================
+   WARMUP SECTION STYLES
+   ====================================== */
+
+/* Warmup Section in Workout Preview Card */
+.warmup-section {
+  background: rgba(0, 206, 201, 0.1);
+  border-left: 4px solid var(--secondary);
+}
+
+.warmup-exercises {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.warmup-tag {
+  background: var(--surface);
+  padding: 6px 12px;
+  border-radius: 15px;
+  font-size: 0.85rem;
+}
+
+.warmup-tag.cardio {
+  background: rgba(225, 112, 85, 0.2);
+  color: var(--danger);
+  border: 1px solid var(--danger);
+}
+
+.warmup-tag.dynamic {
+  background: rgba(108, 92, 231, 0.2);
+  color: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.warmup-tag.activation {
+  background: rgba(0, 206, 201, 0.2);
+  color: var(--secondary);
+  border: 1px solid var(--secondary);
+}
+
+/* Active Warmup Phase Styles */
+.active-workout.warmup-phase {
+  padding-bottom: 120px;
+}
+
+.warmup-section-active {
+  margin-bottom: 30px;
+}
+
+.warmup-exercise-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.warmup-exercise-item {
+  background: var(--surface);
+  border-radius: var(--border-radius);
+  padding: 16px 20px;
+  display: flex;
+  gap: 15px;
+  cursor: pointer;
+  transition: var(--transition);
+  border: 2px solid transparent;
+}
+
+.warmup-exercise-item:hover {
+  border-color: var(--surface-light);
+  background: var(--surface-light);
+}
+
+.warmup-exercise-item.completed {
+  border-color: var(--success);
+  background: rgba(0, 184, 148, 0.1);
+}
+
+.warmup-exercise-check {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--surface-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.warmup-exercise-item.completed .warmup-exercise-check {
+  background: var(--success);
+  border-color: var(--success);
+}
+
+.warmup-check-icon {
+  color: transparent;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.warmup-check-icon.checked {
+  color: white;
+}
+
+.warmup-exercise-info {
+  flex: 1;
+}
+
+.warmup-exercise-info h4 {
+  font-size: 1rem;
+  margin-bottom: 4px;
+}
+
+.warmup-exercise-item.completed .warmup-exercise-info h4 {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+.warmup-exercise-info p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.warmup-exercise-meta {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.warmup-category {
+  padding: 3px 10px;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.warmup-category.cardio {
+  background: rgba(225, 112, 85, 0.2);
+  color: var(--danger);
+}
+
+.warmup-category.dynamic {
+  background: rgba(108, 92, 231, 0.2);
+  color: var(--primary);
+}
+
+.warmup-category.activation {
+  background: rgba(0, 206, 201, 0.2);
+  color: var(--secondary);
+}
+
+.warmup-duration {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Warmup Progress */
+.warmup-progress {
+  margin-top: 20px;
+  padding: 15px 20px;
+  background: var(--surface);
+  border-radius: var(--border-radius);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.warmup-progress-bar {
+  flex: 1;
+  height: 8px;
+  background: var(--surface-light);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.warmup-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--secondary), var(--success));
+  transition: width 0.3s ease;
+  border-radius: 4px;
+}
+
+.warmup-progress-text {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+/* Mobile adjustments for warmup */
+@media (max-width: 600px) {
+  .warmup-exercise-item {
+    padding: 14px 16px;
+  }
+
+  .warmup-exercise-check {
+    width: 28px;
+    height: 28px;
+  }
+
+  .warmup-exercise-info h4 {
+    font-size: 0.95rem;
+  }
+
+  .warmup-progress {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .warmup-progress-bar {
+    width: 100%;
+  }
+}
