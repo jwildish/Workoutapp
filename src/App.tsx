@@ -21,6 +21,21 @@ type View = 'planner' | 'workout';
 const GUEST_PLAN_KEY = 'hypertrophy_guest_plan';
 const GUEST_HISTORY_KEY = 'hypertrophy_guest_history';
 
+// Normalize old workout data that may be missing newer sections
+const normalizeWorkout = (workout: Workout): Workout => ({
+  ...workout,
+  warmupSection: workout.warmupSection || { exercises: [], totalDuration: 0 },
+  correctivesSection: workout.correctivesSection || { exercises: [], totalDuration: 0 },
+  yogaSection: workout.yogaSection || { exercises: [], totalDuration: 0 },
+  hiitSection: workout.hiitSection || { exercises: [], workSeconds: 20, restSeconds: 10, rounds: 0, totalDuration: 0 },
+});
+
+const normalizeWeekPlans = (plans: WeekPlan[]): WeekPlan[] =>
+  plans.map(plan => ({
+    ...plan,
+    workouts: plan.workouts.map(normalizeWorkout),
+  }));
+
 function AppContent() {
   const { user, loading: authLoading, isGuest, signOut } = useAuth();
   const [settings, setSettings] = useState<WorkoutSettings>(defaultSettings);
@@ -48,7 +63,7 @@ function AppContent() {
           const savedPlan = localStorage.getItem(GUEST_PLAN_KEY);
           if (savedPlan) {
             const parsed = JSON.parse(savedPlan);
-            setWeekPlans(parsed.plan);
+            setWeekPlans(normalizeWeekPlans(parsed.plan));
             if (parsed.settings) setSettings(parsed.settings);
           } else {
             const plan = generate8WeekPlan(settings);
@@ -86,7 +101,7 @@ function AppContent() {
         setUserData(data);
 
         if (data.currentPlan && data.currentPlan.length > 0) {
-          setWeekPlans(data.currentPlan);
+          setWeekPlans(normalizeWeekPlans(data.currentPlan));
           if (data.planSettings) {
             setSettings(data.planSettings);
           }
@@ -360,10 +375,12 @@ function AppContent() {
         <div className="program-info">
           <h4>Program Structure</h4>
           <ul>
-            <li><strong>4 Days/Week:</strong> Push/Pull split with legs</li>
-            <li><strong>Strength:</strong> 2 exercises, heavy weight, 4-6 reps</li>
-            <li><strong>Hypertrophy:</strong> 3 exercises, moderate weight, 8-12 reps</li>
-            <li><strong>HIIT:</strong> 8 min Tabata (20s work / 10s rest)</li>
+            <li><strong>4 Days/Week:</strong> Full body with varied exercises</li>
+            <li><strong>Strength:</strong> 2 exercises, 5 sets x 5 reps</li>
+            <li><strong>Hypertrophy:</strong> 3 exercises, 4 sets x 10 reps</li>
+            <li><strong>Correctives:</strong> Mobility and stability work</li>
+            <li><strong>HIIT:</strong> 8 min mixed intervals (20-40s work / 10-20s rest)</li>
+            <li><strong>Yoga Flow:</strong> 2 min cooldown routine</li>
             <li><strong>Week 4:</strong> Deload week for recovery</li>
           </ul>
           <h4 style={{marginTop: '15px'}}>Progressive Overload</h4>

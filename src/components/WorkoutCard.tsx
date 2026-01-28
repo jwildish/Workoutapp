@@ -60,16 +60,18 @@ export const WorkoutCard: React.FC<Props> = ({ workout, onStartWorkout }) => {
       </div>
 
       <div className="workout-sections">
-        <div className="section warmup-section">
-          <h5>Warm-Up ({Math.round(workout.warmupSection.totalDuration / 60)} min)</h5>
-          <div className="warmup-exercises">
-            {workout.warmupSection.exercises.map((ex) => (
-              <span key={ex.id} className={`warmup-tag ${ex.category}`}>
-                {ex.name} ({ex.duration}s)
-              </span>
-            ))}
+        {workout.warmupSection?.exercises?.length > 0 && (
+          <div className="section warmup-section">
+            <h5>Warm-Up ({Math.round(workout.warmupSection.totalDuration / 60)} min)</h5>
+            <div className="warmup-exercises">
+              {workout.warmupSection.exercises.map((ex) => (
+                <span key={ex.id} className={`warmup-tag ${ex.category}`}>
+                  {ex.name} ({ex.duration}s)
+                </span>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="section strength-section">
           <h5>Strength (Heavy/Low Volume)</h5>
@@ -133,45 +135,51 @@ export const WorkoutCard: React.FC<Props> = ({ workout, onStartWorkout }) => {
           </ul>
         </div>
 
-        <div className="section correctives-section">
-          <h5>Correctives ({Math.round(workout.correctivesSection.totalDuration / 60)} min)</h5>
-          <div className="correctives-exercises">
-            {workout.correctivesSection.exercises.map((ex) => (
-              <span key={ex.id} className="correctives-tag">
-                {ex.name} {ex.reps && `(${ex.reps})`}
-              </span>
-            ))}
+        {workout.correctivesSection?.exercises?.length > 0 && (
+          <div className="section correctives-section">
+            <h5>Correctives ({Math.round(workout.correctivesSection.totalDuration / 60)} min)</h5>
+            <div className="correctives-exercises">
+              {workout.correctivesSection.exercises.map((ex) => (
+                <span key={ex.id} className="correctives-tag">
+                  {ex.name} {ex.reps && `(${ex.reps})`}
+                </span>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
-        <div className="section hiit-section">
-          <h5>HIIT Finisher (8 min)</h5>
-          <div className="hiit-format">
-            Mixed intervals: 20-40s work / 10-20s rest x {workout.hiitSection.rounds} rounds
+        {workout.hiitSection?.exercises?.length > 0 && (
+          <div className="section hiit-section">
+            <h5>HIIT Finisher (8 min)</h5>
+            <div className="hiit-format">
+              Mixed intervals: 20-40s work / 10-20s rest x {workout.hiitSection.rounds} rounds
+            </div>
+            <div className="hiit-exercises">
+              {workout.hiitSection.exercises.map((ex, idx) => (
+                <span
+                  key={idx}
+                  className={`hiit-exercise-tag ${ex.muscleGroup === 'core' ? 'core-exercise' : ''}`}
+                >
+                  {ex.muscleGroup === 'core' && '🔥 '}
+                  {ex.name}
+                </span>
+              ))}
+            </div>
           </div>
-          <div className="hiit-exercises">
-            {workout.hiitSection.exercises.map((ex, idx) => (
-              <span
-                key={idx}
-                className={`hiit-exercise-tag ${ex.muscleGroup === 'core' ? 'core-exercise' : ''}`}
-              >
-                {ex.muscleGroup === 'core' && '🔥 '}
-                {ex.name}
-              </span>
-            ))}
-          </div>
-        </div>
+        )}
 
-        <div className="section yoga-section">
-          <h5>Yoga Flow ({Math.round(workout.yogaSection.totalDuration / 60)} min)</h5>
-          <div className="yoga-exercises">
-            {workout.yogaSection.exercises.map((ex) => (
-              <span key={ex.id} className="yoga-tag">
-                {ex.name} ({ex.duration}s)
-              </span>
-            ))}
+        {workout.yogaSection?.exercises?.length > 0 && (
+          <div className="section yoga-section">
+            <h5>Yoga Flow ({Math.round(workout.yogaSection.totalDuration / 60)} min)</h5>
+            <div className="yoga-exercises">
+              {workout.yogaSection.exercises.map((ex) => (
+                <span key={ex.id} className="yoga-tag">
+                  {ex.name} ({ex.duration}s)
+                </span>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       <button className="start-workout-btn" onClick={() => onStartWorkout(workout)}>

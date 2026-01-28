@@ -33,6 +33,17 @@ export const ActiveWorkout: React.FC<Props> = ({ workout, onComplete, onExit }) 
   const [expandedExercise, setExpandedExercise] = useState<string | null>(null);
   const [warmupCompleted, setWarmupCompleted] = useState<Set<string>>(new Set());
 
+  // Skip warmup if no warmup exercises exist
+  useEffect(() => {
+    const warmupExercises = workout.warmupSection?.exercises || [];
+    if (phase === 'warmup' && warmupExercises.length === 0) {
+      setPhase('strength');
+      if (workout.strengthExercises.length > 0) {
+        setExpandedExercise(workout.strengthExercises[0].id);
+      }
+    }
+  }, [phase, workout]);
+
   // Initialize exercise data with default sets
   useEffect(() => {
     const data = new Map<string, ExerciseData>();
@@ -354,9 +365,8 @@ export const ActiveWorkout: React.FC<Props> = ({ workout, onComplete, onExit }) 
     const warmupExercises = workout.warmupSection?.exercises || [];
     const warmupDuration = workout.warmupSection?.totalDuration || 0;
 
-    // If no warmup section, skip to strength
+    // If no warmup section, useEffect above will handle the skip
     if (warmupExercises.length === 0) {
-      setPhase('strength');
       return null;
     }
 
