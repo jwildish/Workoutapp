@@ -173,7 +173,9 @@ export const ActiveWorkout: React.FC<Props> = ({ workout, onComplete, onExit }) 
     onComplete(completedWorkout);
   };
 
-  const isWarmupComplete = warmupCompleted.size === workout.warmupSection.exercises.length;
+  const isWarmupComplete = workout.warmupSection?.exercises
+    ? warmupCompleted.size === workout.warmupSection.exercises.length
+    : true;
 
   const handleWarmupExerciseComplete = (exerciseId: string) => {
     setWarmupCompleted(prev => {
@@ -349,6 +351,15 @@ export const ActiveWorkout: React.FC<Props> = ({ workout, onComplete, onExit }) 
   }
 
   if (phase === 'warmup') {
+    const warmupExercises = workout.warmupSection?.exercises || [];
+    const warmupDuration = workout.warmupSection?.totalDuration || 0;
+
+    // If no warmup section, skip to strength
+    if (warmupExercises.length === 0) {
+      setPhase('strength');
+      return null;
+    }
+
     return (
       <div className="active-workout warmup-phase">
         <div className="workout-header-bar">
@@ -362,11 +373,11 @@ export const ActiveWorkout: React.FC<Props> = ({ workout, onComplete, onExit }) 
           <div className="phase-section warmup-section-active">
             <div className="phase-section-header">
               <h3>Warm-Up</h3>
-              <span className="phase-subtitle">~{Math.round(workout.warmupSection.totalDuration / 60)} min</span>
+              <span className="phase-subtitle">~{Math.round(warmupDuration / 60)} min</span>
             </div>
 
             <div className="warmup-exercise-list">
-              {workout.warmupSection.exercises.map((exercise) => {
+              {warmupExercises.map((exercise) => {
                 const isCompleted = warmupCompleted.has(exercise.id);
                 return (
                   <div
@@ -396,11 +407,11 @@ export const ActiveWorkout: React.FC<Props> = ({ workout, onComplete, onExit }) 
               <div className="warmup-progress-bar">
                 <div
                   className="warmup-progress-fill"
-                  style={{ width: `${(warmupCompleted.size / workout.warmupSection.exercises.length) * 100}%` }}
+                  style={{ width: `${warmupExercises.length > 0 ? (warmupCompleted.size / warmupExercises.length) * 100 : 0}%` }}
                 />
               </div>
               <span className="warmup-progress-text">
-                {warmupCompleted.size} / {workout.warmupSection.exercises.length} completed
+                {warmupCompleted.size} / {warmupExercises.length} completed
               </span>
             </div>
           </div>

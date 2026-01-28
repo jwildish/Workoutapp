@@ -115,7 +115,7 @@ export interface WorkoutSettings {
   availableEquipment: string[];
 }
 
-export type WorkoutPhase = 'warmup' | 'strength' | 'hypertrophy' | 'hiit' | 'cooldown' | 'complete';
+export type WorkoutPhase = 'warmup' | 'strength' | 'hypertrophy' | 'correctives' | 'hiit' | 'yoga' | 'complete';
 
 // Weight tracking
 export interface WeightEntry {
