@@ -7,6 +7,7 @@ import { WorkoutCard } from './components/WorkoutCard';
 import { ActiveWorkout } from './components/ActiveWorkout';
 import { Login } from './components/Login';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import {
   getOrCreateUser,
   getUserData,
@@ -24,6 +25,9 @@ const GUEST_HISTORY_KEY = 'hypertrophy_guest_history';
 // Normalize old workout data that may be missing newer sections
 const normalizeWorkout = (workout: Workout): Workout => ({
   ...workout,
+  strengthExercises: workout.strengthExercises || [],
+  hypertrophyExercises: workout.hypertrophyExercises || [],
+  targetMuscles: workout.targetMuscles || [],
   warmupSection: workout.warmupSection || { exercises: [], totalDuration: 0 },
   correctivesSection: workout.correctivesSection || { exercises: [], totalDuration: 0 },
   yogaSection: workout.yogaSection || { exercises: [], totalDuration: 0 },
@@ -240,11 +244,21 @@ function AppContent() {
 
   if (view === 'workout' && activeWorkout) {
     return (
-      <ActiveWorkout
-        workout={activeWorkout}
-        onComplete={handleWorkoutComplete}
-        onExit={handleExitWorkout}
-      />
+      <ErrorBoundary fallback={
+        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#1a1a2e', color: '#fff', padding: '20px', textAlign: 'center' }}>
+          <h2>Error loading workout</h2>
+          <p style={{ color: '#a0aec0', margin: '15px 0' }}>There was a problem displaying this workout.</p>
+          <button onClick={handleExitWorkout} style={{ padding: '12px 24px', border: 'none', borderRadius: '12px', background: '#6c5ce7', color: 'white', fontSize: '1rem', cursor: 'pointer' }}>
+            Back to Plan
+          </button>
+        </div>
+      }>
+        <ActiveWorkout
+          workout={normalizeWorkout(activeWorkout)}
+          onComplete={handleWorkoutComplete}
+          onExit={handleExitWorkout}
+        />
+      </ErrorBoundary>
     );
   }
 
@@ -397,9 +411,11 @@ function AppContent() {
 
 function App() {
   return (
-    <AuthProvider>
-      <AppContent />
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }
 

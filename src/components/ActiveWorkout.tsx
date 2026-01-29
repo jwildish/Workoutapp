@@ -34,22 +34,25 @@ export const ActiveWorkout: React.FC<Props> = ({ workout, onComplete, onExit }) 
   const [startTime] = useState<Date>(new Date());
   const [expandedExercise, setExpandedExercise] = useState<string | null>(null);
 
+  const strengthExercises = workout.strengthExercises || [];
+  const hypertrophyExercises = workout.hypertrophyExercises || [];
+  const warmupExercisesList = workout.warmupSection?.exercises || [];
+
   // Skip warmup if no warmup exercises exist
   useEffect(() => {
-    const warmupExercises = workout.warmupSection?.exercises || [];
-    if (phase === 'warmup' && warmupExercises.length === 0) {
+    if (phase === 'warmup' && warmupExercisesList.length === 0) {
       setPhase('strength');
-      if (workout.strengthExercises.length > 0) {
-        setExpandedExercise(workout.strengthExercises[0].id);
+      if (strengthExercises.length > 0) {
+        setExpandedExercise(strengthExercises[0].id);
       }
     }
-  }, [phase, workout]);
+  }, [phase, warmupExercisesList.length, strengthExercises]);
 
   // Initialize exercise data with default sets
   useEffect(() => {
     const data = new Map<string, ExerciseData>();
 
-    workout.strengthExercises.forEach(ex => {
+    strengthExercises.forEach(ex => {
       data.set(ex.id, {
         exerciseId: ex.id,
         exerciseName: ex.name,
@@ -57,13 +60,13 @@ export const ActiveWorkout: React.FC<Props> = ({ workout, onComplete, onExit }) 
         isStrength: true,
         sets: Array.from({ length: ex.sets }, () => ({
           weight: '',
-          reps: ex.reps.split('-')[0], // Use lower bound of rep range
+          reps: (ex.reps || '5').split('-')[0],
           completed: false
         }))
       });
     });
 
-    workout.hypertrophyExercises.forEach(ex => {
+    hypertrophyExercises.forEach(ex => {
       data.set(ex.id, {
         exerciseId: ex.id,
         exerciseName: ex.name,
@@ -71,7 +74,7 @@ export const ActiveWorkout: React.FC<Props> = ({ workout, onComplete, onExit }) 
         isStrength: false,
         sets: Array.from({ length: ex.sets }, () => ({
           weight: '',
-          reps: ex.reps.split('-')[0],
+          reps: (ex.reps || '10').split('-')[0],
           completed: false
         }))
       });
@@ -80,8 +83,8 @@ export const ActiveWorkout: React.FC<Props> = ({ workout, onComplete, onExit }) 
     setExerciseData(data);
 
     // Auto-expand first exercise
-    if (workout.strengthExercises.length > 0) {
-      setExpandedExercise(workout.strengthExercises[0].id);
+    if (strengthExercises.length > 0) {
+      setExpandedExercise(strengthExercises[0].id);
     }
   }, [workout]);
 
@@ -132,7 +135,7 @@ export const ActiveWorkout: React.FC<Props> = ({ workout, onComplete, onExit }) 
   };
 
   const isPhaseComplete = (phaseType: 'strength' | 'hypertrophy'): boolean => {
-    const exercises = phaseType === 'strength' ? workout.strengthExercises : workout.hypertrophyExercises;
+    const exercises = phaseType === 'strength' ? strengthExercises : hypertrophyExercises;
     return exercises.every(ex => isExerciseComplete(ex.id));
   };
 
@@ -187,8 +190,8 @@ export const ActiveWorkout: React.FC<Props> = ({ workout, onComplete, onExit }) 
 
   const handleSkipWarmup = () => {
     setPhase('strength');
-    if (workout.strengthExercises.length > 0) {
-      setExpandedExercise(workout.strengthExercises[0].id);
+    if (strengthExercises.length > 0) {
+      setExpandedExercise(strengthExercises[0].id);
     }
   };
 
@@ -347,10 +350,8 @@ export const ActiveWorkout: React.FC<Props> = ({ workout, onComplete, onExit }) 
   }
 
   if (phase === 'warmup') {
-    const warmupExercises = workout.warmupSection?.exercises || [];
-
     // If no warmup section, useEffect above will handle the skip
-    if (warmupExercises.length === 0) {
+    if (warmupExercisesList.length === 0) {
       return null;
     }
 
@@ -381,7 +382,7 @@ export const ActiveWorkout: React.FC<Props> = ({ workout, onComplete, onExit }) 
             <h3>Strength</h3>
             <span className="phase-subtitle">Heavy weight, low reps</span>
           </div>
-          {workout.strengthExercises.map(ex => renderExerciseCard(ex, true))}
+          {strengthExercises.map(ex => renderExerciseCard(ex, true))}
         </div>
 
         {/* Hypertrophy Section */}
@@ -390,7 +391,7 @@ export const ActiveWorkout: React.FC<Props> = ({ workout, onComplete, onExit }) 
             <h3>Hypertrophy</h3>
             <span className="phase-subtitle">Moderate weight, higher reps</span>
           </div>
-          {workout.hypertrophyExercises.map(ex => renderExerciseCard(ex, false))}
+          {hypertrophyExercises.map(ex => renderExerciseCard(ex, false))}
         </div>
 
         {/* Action Buttons */}
