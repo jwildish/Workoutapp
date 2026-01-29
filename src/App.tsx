@@ -15,6 +15,7 @@ import {
   saveCompletedWorkout
 } from './services/firestoreService';
 import { exportToText, copyToClipboard, downloadAsPDF, downloadAsText } from './utils/exportPlan';
+import { correctivesExercises, yogaExercises } from './data/exercises';
 import './App.css';
 
 type View = 'planner' | 'workout';
@@ -22,17 +23,36 @@ type View = 'planner' | 'workout';
 const GUEST_PLAN_KEY = 'hypertrophy_guest_plan';
 const GUEST_HISTORY_KEY = 'hypertrophy_guest_history';
 
-// Normalize old workout data that may be missing newer sections
-const normalizeWorkout = (workout: Workout): Workout => ({
-  ...workout,
-  strengthExercises: workout.strengthExercises || [],
-  hypertrophyExercises: workout.hypertrophyExercises || [],
-  targetMuscles: workout.targetMuscles || [],
-  warmupSection: workout.warmupSection || { exercises: [], totalDuration: 0 },
-  correctivesSection: workout.correctivesSection || { exercises: [], totalDuration: 0 },
-  yogaSection: workout.yogaSection || { exercises: [], totalDuration: 0 },
-  hiitSection: workout.hiitSection || { exercises: [], workSeconds: 20, restSeconds: 10, rounds: 0, totalDuration: 0 },
-});
+// Bump this whenever exercise pools or workout structure changes
+// to force regeneration of stale saved plans
+const PLAN_VERSION = 2;
+
+// Normalize workout data - fills missing sections with real exercise data
+const normalizeWorkout = (workout: Workout): Workout => {
+  const correctivesTotalDuration = correctivesExercises.reduce((sum, ex) => sum + ex.duration, 0);
+  const yogaTotalDuration = yogaExercises.reduce((sum, ex) => sum + ex.duration, 0);
+
+  return {
+    ...workout,
+    strengthExercises: workout.strengthExercises || [],
+    hypertrophyExercises: workout.hypertrophyExercises || [],
+    targetMuscles: workout.targetMuscles || [],
+    warmupSection: workout.warmupSection || { exercises: [], totalDuration: 0 },
+    correctivesSection: (workout.correctivesSection?.exercises?.length > 0)
+      ? workout.correctivesSection
+      : {
+          exercises: correctivesExercises.map(ex => ({ id: ex.id, name: ex.name, duration: ex.duration, reps: ex.reps, description: ex.description })),
+          totalDuration: correctivesTotalDuration,
+        },
+    yogaSection: (workout.yogaSection?.exercises?.length > 0)
+      ? workout.yogaSection
+      : {
+          exercises: yogaExercises.map(ex => ({ id: ex.id, name: ex.name, duration: ex.duration, description: ex.description })),
+          totalDuration: yogaTotalDuration,
+        },
+    hiitSection: workout.hiitSection || { exercises: [], workSeconds: 20, restSeconds: 10, rounds: 0, totalDuration: 0 },
+  };
+};
 
 const normalizeWeekPlans = (plans: WeekPlan[]): WeekPlan[] =>
   plans.map(plan => ({
@@ -67,12 +87,22 @@ function AppContent() {
           const savedPlan = localStorage.getItem(GUEST_PLAN_KEY);
           if (savedPlan) {
             const parsed = JSON.parse(savedPlan);
-            setWeekPlans(normalizeWeekPlans(parsed.plan));
-            if (parsed.settings) setSettings(parsed.settings);
+            if (parsed.version === PLAN_VERSION && parsed.plan) {
+              // Current version - load as-is with normalization for safety
+              setWeekPlans(normalizeWeekPlans(parsed.plan));
+              if (parsed.settings) setSettings(parsed.settings);
+            } else {
+              // Stale version - regenerate with current exercise pools
+              const newSettings = parsed.settings || settings;
+              const plan = generate8WeekPlan(newSettings);
+              setWeekPlans(plan);
+              setSettings(newSettings);
+              localStorage.setItem(GUEST_PLAN_KEY, JSON.stringify({ plan, settings: newSettings, version: PLAN_VERSION }));
+            }
           } else {
             const plan = generate8WeekPlan(settings);
             setWeekPlans(plan);
-            localStorage.setItem(GUEST_PLAN_KEY, JSON.stringify({ plan, settings }));
+            localStorage.setItem(GUEST_PLAN_KEY, JSON.stringify({ plan, settings, version: PLAN_VERSION }));
           }
 
           const savedHistory = localStorage.getItem(GUEST_HISTORY_KEY);
@@ -174,7 +204,7 @@ function AppContent() {
 
   const savePlan = async (plan: WeekPlan[], planSettings: WorkoutSettings) => {
     if (isGuest) {
-      localStorage.setItem(GUEST_PLAN_KEY, JSON.stringify({ plan, settings: planSettings }));
+      localStorage.setItem(GUEST_PLAN_KEY, JSON.stringify({ plan, settings: planSettings, version: PLAN_VERSION }));
     } else if (user) {
       try {
         await saveWorkoutPlan(user.uid, plan, planSettings);
